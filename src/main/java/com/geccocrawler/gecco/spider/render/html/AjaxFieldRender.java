@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,11 @@ import net.sf.cglib.beans.BeanMap;
  *
  */
 public class AjaxFieldRender implements FieldRender {
+    protected GeccoFactory factory;
+
+    public AjaxFieldRender(GeccoFactory factory) {
+        this.factory = factory;
+    }
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -47,7 +53,7 @@ public class AjaxFieldRender implements FieldRender {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object injectAjaxField(HttpRequest request, BeanMap beanMap, Field field) {
+	protected Object injectAjaxField(HttpRequest request, BeanMap beanMap, Field field) {
 		Class clazz = field.getType();
 		// ajax的属性类型必须是spiderBean
 		Ajax ajax = field.getAnnotation(Ajax.class);

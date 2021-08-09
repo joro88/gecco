@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.json;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import net.sf.cglib.beans.BeanMap;
 
 import com.geccocrawler.gecco.request.HttpRequest;
@@ -15,11 +16,11 @@ import com.geccocrawler.gecco.spider.render.AbstractRender;
  */
 public class JsonRender extends AbstractRender {
 	
-	private JsonFieldRender jsonFieldRender;
+	protected JsonFieldRender jsonFieldRender;
 	
-	public JsonRender() {
-		super();
-		this.jsonFieldRender = new JsonFieldRender();
+	public JsonRender(GeccoFactory factory) {
+		super( factory );
+		this.jsonFieldRender = factory.createJsonFieldRender( this );
 	}
 
 	@Override

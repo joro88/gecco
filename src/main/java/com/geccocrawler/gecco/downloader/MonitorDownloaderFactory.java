@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import net.sf.cglib.proxy.Enhancer;
 
 import org.reflections.Reflections;
@@ -13,17 +14,16 @@ import com.geccocrawler.gecco.monitor.DownloadMointorIntercetor;
  *
  */
 public class MonitorDownloaderFactory extends DownloaderFactory {
-	
-	public MonitorDownloaderFactory(Reflections reflections) {
-		super(reflections);
+	public MonitorDownloaderFactory(Reflections reflections, GeccoFactory geccoFactory) {
+		super(reflections, geccoFactory);
 	}
 
 	@Override
 	protected Object createDownloader(Class<?> downloaderClass)	throws Exception {
-		Enhancer enhancer = new Enhancer();
+		Enhancer enhancer = geccoFactory.createEnhancer(downloaderClass, this);
 		enhancer.setSuperclass(downloaderClass);
-		enhancer.setCallback(new DownloadMointorIntercetor());
-		Object o = enhancer.create();
+		enhancer.setCallback(geccoFactory.createDownloadMointorIntercetor(downloaderClass, this));
+		Object o = enhancer.create(new Class[]{GeccoFactory.class}, new Object[] {geccoFactory});
 		return o;
 	}
 

@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.monitor;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class DownloadMonitor {
 	
 	private static Log log = LogFactory.getLog(DownloadMonitor.class);
 	
-	private static Map<String, DownloadStatistics> statistics = new ConcurrentHashMap<String, DownloadStatistics>();
+	protected static Map<String, DownloadStatistics> statistics = new ConcurrentHashMap<String, DownloadStatistics>();
 	
 	//不公平重入锁,用来控制host的创建
 	private static Lock lock = new ReentrantLock();
@@ -34,7 +35,7 @@ public class DownloadMonitor {
 	 * @param host host
 	 * @return DownloadStatistics
 	 */
-	public static DownloadStatistics getStatistics(String host) {
+	public static DownloadStatistics getStatistics(String host, GeccoFactory factory) {
 		DownloadStatistics downloadStatistics = statistics.get(host);
 		if(downloadStatistics != null) {
 			return downloadStatistics;
@@ -43,7 +44,7 @@ public class DownloadMonitor {
 		try{
 			downloadStatistics = statistics.get(host);
 			if(downloadStatistics == null) {
-				downloadStatistics = new DownloadStatistics();
+				downloadStatistics = factory.createDownloadStatistics(host, null); // TODO
 				statistics.put(host, downloadStatistics);
 			}
 		} finally {
@@ -52,7 +53,7 @@ public class DownloadMonitor {
 		return downloadStatistics;
 	}
 	
-	private static String getHost(String url) {
+	protected static String getHost(String url) {
 		try {
 			URL requestUrl = new URL(url);
 			String host = requestUrl.getHost();
@@ -63,15 +64,15 @@ public class DownloadMonitor {
 		}
 	}
 	
-	public static void incrSuccess(String url) {
-		getStatistics(getHost(url)).incrSuccess();
+	public static void incrSuccess(String url, GeccoFactory factory) {
+		getStatistics(getHost(url), factory).incrSuccess();
 	}
 	
-	public static void incrServerError(String url) {
-		getStatistics(getHost(url)).incrServerError();
+	public static void incrServerError(String url, GeccoFactory factory) {
+		getStatistics(getHost(url), factory).incrServerError();
 	}
 	
-	public static void incrException(String url) {
-		getStatistics(getHost(url)).incrException();
+	public static void incrException(String url, GeccoFactory factory) {
+		getStatistics(getHost(url), factory).incrException();
 	}
 }

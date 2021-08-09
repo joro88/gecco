@@ -48,7 +48,7 @@ public class DownloadMBean {
 
 	@Managed
     public void statistics(String host) {
-    	DownloadStatistics ds = DownloadMonitor.getStatistics(host);
+    	DownloadStatistics ds = DownloadMonitor.getStatistics(host, null); // TODO
     	setStatistics(JSON.toJSONString(ds));
     	setHost(JSON.toJSONString(host));
     }

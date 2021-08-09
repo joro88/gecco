@@ -12,7 +12,7 @@ import com.geccocrawler.gecco.request.HttpRequest;
  */
 public class StartScheduler implements Scheduler {
 	
-	private LinkedBlockingQueue<HttpRequest> startQueue;
+	protected LinkedBlockingQueue<HttpRequest> startQueue;
 	
 	public StartScheduler() {
 		startQueue = new LinkedBlockingQueue<HttpRequest>();

@@ -12,7 +12,7 @@ import com.geccocrawler.gecco.request.HttpRequest;
  */
 public class NoLoopStartScheduler implements Scheduler {
 	
-	private ConcurrentLinkedQueue<HttpRequest> queue;
+	protected ConcurrentLinkedQueue<HttpRequest> queue;
 	
 	public NoLoopStartScheduler() {
 		queue = new ConcurrentLinkedQueue<HttpRequest>();

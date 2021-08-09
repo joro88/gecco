@@ -68,7 +68,7 @@ public class ReflectUtils {
 		}
 	}
 
-	private static Class getGenericClass(ParameterizedType parameterizedType, int i) {
+	protected static Class getGenericClass(ParameterizedType parameterizedType, int i) {
 		Object genericClass = parameterizedType.getActualTypeArguments()[i];
 		if (genericClass instanceof ParameterizedType) { // 处理多级泛型
 			return (Class) ((ParameterizedType) genericClass).getRawType();

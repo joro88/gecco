@@ -15,6 +15,7 @@ import org.reflections.ReflectionUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.JSONPath;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
@@ -32,8 +33,13 @@ import com.geccocrawler.gecco.utils.ReflectUtils;
 import net.sf.cglib.beans.BeanMap;
 
 public class JsonFieldRender implements FieldRender {
+    protected GeccoFactory factory;
 
-	@Override
+    public JsonFieldRender(GeccoFactory factory) {
+        this.factory = factory;
+    }
+    
+    @Override
 	@SuppressWarnings({ "unchecked" })
 	public void render(HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean) {
 		Map<String, Object> fieldMap = new HashMap<String, Object>();
@@ -59,7 +65,7 @@ public class JsonFieldRender implements FieldRender {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object injectJsonField(HttpRequest request, Field field, Object json) {
+	protected Object injectJsonField(HttpRequest request, Field field, Object json) {
 		JSONPath JSONPath = field.getAnnotation(JSONPath.class);
 		String jsonPath = JSONPath.value();
 		Class<?> type = field.getType();// 类属性的类
@@ -102,7 +108,7 @@ public class JsonFieldRender implements FieldRender {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private List<SpiderBean> spiderBeanListRender(Object src, Class genericClass, HttpRequest request) {
+	protected List<SpiderBean> spiderBeanListRender(Object src, Class genericClass, HttpRequest request) {
 		List<SpiderBean> list = new ArrayList<SpiderBean>();
 		Iterable ja = (Iterable) src;
 		for (Object jo : ja) {
@@ -115,8 +121,8 @@ public class JsonFieldRender implements FieldRender {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SpiderBean spiderBeanRender(Object src, Class genericClass, HttpRequest request) {
-		HttpResponse subResponse = HttpResponse.createSimple(src.toString());
+	protected SpiderBean spiderBeanRender(Object src, Class genericClass, HttpRequest request) {
+		HttpResponse subResponse = factory.createSimpleHttpResponse(src.toString());
 		Render render = null;
 		if(ReflectUtils.haveSuperType(genericClass, JsonBean.class)) {
 			render = RenderContext.getRender(RenderType.JSON);
@@ -127,7 +133,7 @@ public class JsonFieldRender implements FieldRender {
 		return subBean;
 	}
 
-	private Object objectRender(Object src, Field field, String jsonPath, Object json) {
+	protected Object objectRender(Object src, Field field, String jsonPath, Object json) {
 		if (src == null) {
 			//throw new FieldRenderException(field, jsonPath + " not found in : " + json);
 			FieldRenderException.log(field, jsonPath + " not found in : " + json);
@@ -141,7 +147,7 @@ public class JsonFieldRender implements FieldRender {
 		return null;
 	}
 
-	private String jsonp2Json(String jsonp) {
+	protected String jsonp2Json(String jsonp) {
 		if (jsonp == null) {
 			return null;
 		}

@@ -19,7 +19,7 @@ public class UniqueSpiderScheduler implements Scheduler {
 	
 	private static Log log = LogFactory.getLog(UniqueSpiderScheduler.class);
 	
-	private NavigableSet<SortHttpRequest> set;
+	protected NavigableSet<SortHttpRequest> set;
 	
 	public UniqueSpiderScheduler() {
 		set = new ConcurrentSkipListSet<SortHttpRequest>(new Comparator<SortHttpRequest>() {
@@ -63,11 +63,11 @@ public class UniqueSpiderScheduler implements Scheduler {
 		}
 	}
 	
-	private class SortHttpRequest {
+	protected class SortHttpRequest {
 		
-		private long priority;
+		protected long priority;
 		
-		private HttpRequest httpRequest;
+		protected HttpRequest httpRequest;
 
 		public SortHttpRequest(long priority, HttpRequest httpRequest) {
 			super();

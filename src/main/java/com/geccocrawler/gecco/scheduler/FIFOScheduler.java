@@ -21,9 +21,9 @@ public class FIFOScheduler implements Scheduler {
 	
 	private static Log log = LogFactory.getLog(FIFOScheduler.class);
 
-	private LinkedBlockingQueue<HttpRequest> starQueue;
+	protected LinkedBlockingQueue<HttpRequest> starQueue;
 	
-	private ConcurrentLinkedQueue<HttpRequest> queue;
+	protected ConcurrentLinkedQueue<HttpRequest> queue;
 	
 	private ReentrantLock outLock;
 	

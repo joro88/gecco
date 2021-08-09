@@ -10,7 +10,7 @@ import com.geccocrawler.gecco.annotation.MBean;
 
 public class GeccoJmx {
 	
-	private static MBeanExporter exporter = new MBeanExporter(ManagementFactory.getPlatformMBeanServer());
+	protected static MBeanExporter exporter = new MBeanExporter(ManagementFactory.getPlatformMBeanServer());
 	
 	public static void export(String classpath) {
 		Reflections reflections = new Reflections("com.geccocrawler.gecco.monitor");

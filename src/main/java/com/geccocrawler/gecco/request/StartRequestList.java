@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.request;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,16 +22,16 @@ public class StartRequestList {
 		posts = new HashMap<String, String>();
 	}
 	
-	public HttpRequest toRequest() {
+	public HttpRequest toRequest( GeccoFactory factory ) {
 		if(posts != null && posts.size() > 0) {
-			HttpPostRequest post = new HttpPostRequest(this.getUrl());
+			HttpPostRequest post = factory.createHttpPostRequest( this );
 			post.setCharset(charset);
 			post.setFields(posts);
 			post.setCookies(cookies);
 			post.setHeaders(headers);
 			return post;
 		} else {
-			HttpGetRequest get = new HttpGetRequest(this.getUrl());
+			HttpGetRequest get = factory.createHttpGetRequest( this.getUrl() );
 			get.setCharset(charset);
 			get.setCookies(cookies);
 			get.setHeaders(headers);

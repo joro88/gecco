@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class RenderMonitor {
 	
-	private static Map<String, AtomicLong> statistics = new ConcurrentHashMap<String, AtomicLong>();
+	protected static Map<String, AtomicLong> statistics = new ConcurrentHashMap<String, AtomicLong>();
 	
 	private static Lock lock = new ReentrantLock();
 	

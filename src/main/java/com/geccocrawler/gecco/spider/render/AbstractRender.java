@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
@@ -29,24 +30,27 @@ public abstract class AbstractRender implements Render {
 	
 	private static Log log = LogFactory.getLog(AbstractRender.class);
 
+    protected GeccoFactory geccoFactory;
+    
 	/**
 	 * request请求的注入
 	 */
-	private RequestFieldRender requestFieldRender;
+	protected RequestFieldRender requestFieldRender;
 
 	/**
 	 * request参数的注入
 	 */
-	private RequestParameterFieldRender requestParameterFieldRender;
+	protected RequestParameterFieldRender requestParameterFieldRender;
 
 	/**
 	 * 自定义注入
 	 */
-	private CustomFieldRenderFactory customFieldRenderFactory;
+	protected CustomFieldRenderFactory customFieldRenderFactory;
 
-	public AbstractRender() {
-		this.requestFieldRender = new RequestFieldRender();
-		this.requestParameterFieldRender = new RequestParameterFieldRender();
+	public AbstractRender( GeccoFactory geccoFactory ) {
+        this.geccoFactory = geccoFactory;
+		this.requestFieldRender = geccoFactory.createRequestFieldRender( this );
+		this.requestParameterFieldRender = geccoFactory.createRequestParameterFieldRender( this );
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -22,7 +23,12 @@ import net.sf.cglib.beans.BeanMap;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class HtmlFieldRender implements FieldRender {
+    protected GeccoFactory factory;
 
+    public HtmlFieldRender(GeccoFactory factory) {
+        this.factory = factory;
+    }
+    
 	@Override
 	public void render(HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean) {
 		Map<String, Object> fieldMap = new HashMap<String, Object>();
@@ -36,10 +42,10 @@ public class HtmlFieldRender implements FieldRender {
 		beanMap.putAll(fieldMap);
 	}
 
-	private Object injectHtmlField(HttpRequest request, HttpResponse response, Field field,	Class<? extends SpiderBean> clazz) {
+	protected Object injectHtmlField(HttpRequest request, HttpResponse response, Field field,	Class<? extends SpiderBean> clazz) {
 		HtmlField htmlField = field.getAnnotation(HtmlField.class);
 		String content = response.getContent();
-		HtmlParser parser = new HtmlParser(request.getUrl(), content);
+		HtmlParser parser = factory.createHtmlParser(request.getUrl(), content, this);
 		// parser.setLogClass(clazz);
 		String cssPath = htmlField.cssPath();
 		Class<?> type = field.getType();// 属性的类

@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -28,6 +29,11 @@ import net.sf.cglib.beans.BeanMap;
  *
  */
 public class ImageFieldRender implements FieldRender {
+    protected GeccoFactory factory;
+
+    public ImageFieldRender(GeccoFactory factory) {
+        this.factory = factory;
+    }
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -44,7 +50,7 @@ public class ImageFieldRender implements FieldRender {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Object injectImageField(HttpRequest request, BeanMap beanMap, SpiderBean bean, Field field) {
+	protected Object injectImageField(HttpRequest request, BeanMap beanMap, SpiderBean bean, Field field) {
 		Object value = beanMap.get(field.getName());
 		if(value == null) {
 			return null;
@@ -61,7 +67,7 @@ public class ImageFieldRender implements FieldRender {
 		}
 	}
 	
-	private String downloadImage(HttpRequest request, Field field, String imgUrl) {
+	protected String downloadImage(HttpRequest request, Field field, String imgUrl) {
 		if(StringUtils.isEmpty(imgUrl)) {
 			return imgUrl;
 		}

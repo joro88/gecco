@@ -27,6 +27,7 @@ import com.geccocrawler.gecco.monitor.GeccoJmx;
 import com.geccocrawler.gecco.monitor.GeccoMonitor;
 import com.geccocrawler.gecco.pipeline.PipelineFactory;
 import com.geccocrawler.gecco.request.HttpGetRequest;
+import com.geccocrawler.gecco.request.HttpPostRequest;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.request.StartRequestList;
 import com.geccocrawler.gecco.scheduler.NoLoopStartScheduler;
@@ -47,45 +48,47 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	private static Log log = LogFactory.getLog(GeccoEngine.class);
 
-	private Date startTime;
+	protected Date startTime;
 
-	private List<HttpRequest> startRequests = new ArrayList<HttpRequest>();
+	protected List<HttpRequest> startRequests = new ArrayList<HttpRequest>();
 
-	private Scheduler scheduler;
+	protected Scheduler scheduler;
 
-	private SpiderBeanFactory spiderBeanFactory;
+	protected SpiderBeanFactory spiderBeanFactory;
 
-	private PipelineFactory pipelineFactory;
+	protected PipelineFactory pipelineFactory;
 
-	private List<Spider> spiders;
+	protected List<Spider> spiders;
 
-	private String classpath;
+	protected String classpath;
 
-	private int threadCount;
+	protected int threadCount;
 
-	private CountDownLatch cdl;
+	protected CountDownLatch cdl;
 
-	private int interval;
+	protected int interval;
 
-	private Proxys proxysLoader;
+	protected Proxys proxysLoader;
 	
-	private boolean proxy = true;
+	protected boolean proxy = true;
 
-	private boolean loop;
+	protected boolean loop;
 
-	private boolean mobile;
+	protected boolean mobile;
 
-	private boolean debug;
+	protected boolean debug;
 	
-	private boolean monitor = true;
+	protected boolean monitor = true;
 
-	private int retry;
+	protected int retry;
 
-	private EventListener eventListener;
+	protected EventListener eventListener;
 	
-	private String jmxPrefix;
+	protected String jmxPrefix;
+    
+    protected GeccoFactory factory;
 
-	private V ret;//callable 返回值
+	protected V ret;//callable 返回值
 
 	public V getRet() {
 		return ret;
@@ -97,6 +100,8 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	private GeccoEngine() {
 		this.retry = 3;
+        factory = createFactory();
+        factory.setEngine(this);
 	}
 
 	/**
@@ -120,13 +125,19 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			throw new IllegalArgumentException("classpath cannot be empty");
 		}
 		GeccoEngine ge = create();
-		ge.spiderBeanFactory = new SpiderBeanFactory(classpath, pipelineFactory);
+        SpiderBeanFactory spiderBeanFactory = ge.getFactory().createSpiderBeanFactory(classpath, pipelineFactory);
+        ge.setSpiderBeanFactory(spiderBeanFactory);
 		return ge;
 	}
+    
+    public GeccoFactory createFactory() {
+        return new GeccoFactory();
+    }
 
 	@Deprecated
 	public GeccoEngine start(String url) {
-		return seed(new HttpGetRequest(url));
+        HttpGetRequest httpGetRequest = factory.createHttpGetRequest(url);
+		return seed(httpGetRequest);
 	}
 
 	@Deprecated
@@ -152,7 +163,8 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 	}
 
 	public GeccoEngine seed(String url) {
-		return seed(new HttpGetRequest(url));
+        HttpGetRequest httpGetRequest = factory.createHttpGetRequest(url);
+		return seed(httpGetRequest);
 	}
 
 	public GeccoEngine seed(String... urls) {
@@ -260,21 +272,17 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			log.setLevel(Level.DEBUG);
 		}
 		if(proxysLoader == null) {//默认采用proxys文件代理集合
-			proxysLoader = new FileProxys();
+			proxysLoader = factory.createProxys();
 		}
 		if (scheduler == null) {
-			if (loop) {
-				scheduler = new StartScheduler();
-			} else {
-				scheduler = new NoLoopStartScheduler();
-			}
+            scheduler = factory.createScheduler();
 		}
 		if (spiderBeanFactory == null) {
 			if (StringUtils.isEmpty(classpath)) {
 				// classpath不为空
 				throw new IllegalArgumentException("classpath cannot be empty");
 			}
-			spiderBeanFactory = new SpiderBeanFactory(classpath, pipelineFactory);
+			spiderBeanFactory = factory.createSpiderBeanFactory(classpath, pipelineFactory);
 		}
 		if (threadCount <= 0) {
 			threadCount = 1;
@@ -290,7 +298,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		}
 		spiders = new ArrayList<Spider>(threadCount);
 		for (int i = 0; i < threadCount; i++) {
-			Spider spider = new Spider(this);
+			Spider spider = factory.createSpider();
 			spiders.add(spider);
 			Thread thread = new Thread(spider, "T" + classpath + i);
 			thread.start();
@@ -314,15 +322,17 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		super.start();
 	}
 
-	private GeccoEngine startsJson() {
+	protected GeccoEngine startsJson() {
 		try {
 			URL url = Resources.getResource("starts.json");
 			File file = new File(url.getPath());
 			if (file.exists()) {
 				String json = Files.toString(file, Charset.forName("UTF-8"));
-				List<StartRequestList> list = JSON.parseArray(json, StartRequestList.class);
+                final Class<? extends StartRequestList> startRequestListClass = 
+                        factory.getStartRequestListClass();
+                List<? extends StartRequestList> list = JSON.parseArray(json, startRequestListClass);
 				for (StartRequestList start : list) {
-					start(start.toRequest());
+					start(start.toRequest(factory));
 				}
 			}
 		} catch (IllegalArgumentException ex) {
@@ -338,6 +348,11 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 	}
 
 	public SpiderBeanFactory getSpiderBeanFactory() {
+		return spiderBeanFactory;
+	}
+
+	public SpiderBeanFactory setSpiderBeanFactory(SpiderBeanFactory newFactory) {
+        spiderBeanFactory = newFactory;
 		return spiderBeanFactory;
 	}
 
@@ -484,6 +499,14 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		}
 	}
 
+    public GeccoFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(GeccoFactory factory) {
+        this.factory = factory;
+    }
+
 	public EventListener getEventListener() {
 		return eventListener;
 	}
@@ -492,7 +515,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		this.eventListener = eventListener;
 		return this;
 	}
-
+    
 
 	@Override
 	public V call() throws Exception {

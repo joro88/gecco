@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,10 +11,14 @@ import com.geccocrawler.gecco.spider.render.json.JsonRender;
 
 public abstract class RenderFactory {
 	
-	private Map<RenderType, Render> renders;
+	protected Map<RenderType, Render> renders;
+    
+    protected GeccoFactory factory;
 	
-	public RenderFactory(Reflections reflections) {
-		CustomFieldRenderFactory customFieldRenderFactory = new CustomFieldRenderFactory(reflections);
+	public RenderFactory(Reflections reflections, GeccoFactory factory) {
+        this.factory = factory;
+        
+		CustomFieldRenderFactory customFieldRenderFactory = factory.createCustomFieldRenderFactory(reflections, this);
 		renders = new HashMap<RenderType, Render>();
 		
 		AbstractRender htmlRender = createHtmlRender();

@@ -38,13 +38,13 @@ public class JavassistDynamicField implements DynamicField {
 	
 	private static Log log = LogFactory.getLog(JavassistDynamicField.class);
 	
-	private DynamicBean dynamicBean;
+	protected DynamicBean dynamicBean;
 	
-	private CtField cfield;
+	protected CtField cfield;
 	
-	private ConstPool cpool;
+	protected ConstPool cpool;
 	
-	private AnnotationsAttribute attr;
+	protected AnnotationsAttribute attr;
 	
 	public JavassistDynamicField(DynamicBean dynamicBean, CtClass clazz, ConstPool cpool, String fieldName) {
 		try {

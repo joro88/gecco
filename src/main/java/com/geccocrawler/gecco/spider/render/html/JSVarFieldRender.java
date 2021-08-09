@@ -17,6 +17,7 @@ import org.mozilla.javascript.ScriptableObject;
 import org.reflections.ReflectionUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.JSVar;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
@@ -36,6 +37,12 @@ public class JSVarFieldRender implements FieldRender {
 
 	private static Log log = LogFactory.getLog(JSVarFieldRender.class);
 
+    protected GeccoFactory factory;
+
+    public JSVarFieldRender(GeccoFactory factory) {
+        this.factory = factory;
+    }
+
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public void render(HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean) {
@@ -43,12 +50,12 @@ public class JSVarFieldRender implements FieldRender {
 		ScriptableObject scope = cx.initSafeStandardObjects();
 		String windowScript = "var window = {};var document = {};";
 		cx.evaluateString(scope, windowScript, "window", 1, null);
-		HtmlParser parser = new HtmlParser(request.getUrl(), response.getContent());
+		HtmlParser parser = factory.createHtmlParser(request.getUrl(), response.getContent(), this);
 		for (Element ele : parser.$("script")) {
 			String sc = ele.html();
 			if (StringUtils.isNotEmpty(sc)) {
 				try {
-					cx.evaluateString(scope, sc, "", 1, null);
+					jsEvaluateScript(cx, scope, sc, request, response, beanMap, bean);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
 				}
@@ -66,8 +73,15 @@ public class JSVarFieldRender implements FieldRender {
 		Context.exit();
 	}
 
+    /**
+     * This method allow extending method to change behavior.
+     */
+    public void jsEvaluateScript(Context cx, ScriptableObject scope, String sc, HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean) {
+        cx.evaluateString(scope, sc, "", 1, null);
+    }
+    
 	@SuppressWarnings({ "rawtypes" })
-	private Object injectJsVarField(HttpRequest request, BeanMap beanMap, Field field, Context cx, ScriptableObject scope) {
+	protected Object injectJsVarField(HttpRequest request, BeanMap beanMap, Field field, Context cx, ScriptableObject scope) {
 		Class clazz = field.getType();
 		JSVar jsVar = field.getAnnotation(JSVar.class);
 		String var = jsVar.var();

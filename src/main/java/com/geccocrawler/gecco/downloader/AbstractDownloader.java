@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
@@ -17,9 +18,15 @@ public abstract class AbstractDownloader implements Downloader {
 	
 	private static Log log = LogFactory.getLog(AbstractDownloader.class);
 
-	private static final Pattern charsetPattern = Pattern.compile("(?i)\\bcharset=\\s*\"?([^\\s;\"]*)");
+	protected static final Pattern charsetPattern = Pattern.compile("(?i)\\bcharset=\\s*\"?([^\\s;\"]*)");
 
-	private String getCharsetFromContentType(String contentType) {
+    protected GeccoFactory factory;
+
+    public AbstractDownloader(GeccoFactory factory) {
+        this.factory = factory;
+    }
+    
+	protected String getCharsetFromContentType(String contentType) {
 		if (contentType == null)
 			return null;
 

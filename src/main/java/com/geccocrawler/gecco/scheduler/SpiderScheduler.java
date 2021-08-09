@@ -18,7 +18,7 @@ public class SpiderScheduler implements Scheduler {
 	
 	private static Log log = LogFactory.getLog(SpiderScheduler.class);
 	
-	private ConcurrentLinkedQueue<HttpRequest> queue;
+	protected ConcurrentLinkedQueue<HttpRequest> queue;
 	
 	public SpiderScheduler() {
 		queue = new ConcurrentLinkedQueue<HttpRequest>();

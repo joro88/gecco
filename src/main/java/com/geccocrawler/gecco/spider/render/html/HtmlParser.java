@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,14 @@ public class HtmlParser {
 
 	private Log log;
 
-	private Document document;
+	protected Document document;
 
-	private String baseUri;
+	protected String baseUri;
+    
+    protected GeccoFactory factory;
 
-	public HtmlParser(String baseUri, String content) {
+	public HtmlParser(String baseUri, String content, GeccoFactory factory) {
+        this.factory = factory;
 		long beginTime = System.currentTimeMillis();
 		log = LogFactory.getLog(HtmlParser.class);
 		this.baseUri = baseUri;
@@ -121,7 +125,7 @@ public class HtmlParser {
 	public SpiderBean $bean(String selector, HttpRequest request, Class<? extends SpiderBean> clazz) {
 		String subHtml = $html(selector);
 		// table
-		HttpResponse subResponse = HttpResponse.createSimple(subHtml);
+		HttpResponse subResponse = factory.createSimpleHttpResponse(subHtml);
 		Render render = RenderContext.getRender(RenderType.HTML);
 		return render.inject(clazz, request, subResponse);
 	}
@@ -131,7 +135,7 @@ public class HtmlParser {
 		List<String> els = $list(selector);
 		for (String el : els) {
 			// table
-			HttpResponse subResponse = HttpResponse.createSimple(el);
+			HttpResponse subResponse = factory.createSimpleHttpResponse(el);
 			Render render = RenderContext.getRender(RenderType.HTML);
 			SpiderBean subBean = render.inject(clazz, request, subResponse);
 			list.add(subBean);
@@ -281,7 +285,7 @@ public class HtmlParser {
 		log = LogFactory.getLog(spiderBeanClass);
 	}
 
-	private boolean isTable(String content) {
+	protected boolean isTable(String content) {
 		if (!StringUtils.contains(content, "</html>")) {
 			String rege = "<\\s*(thead|tbody|tr|td|th)[\\s\\S]+";
 			Pattern pattern = Pattern.compile(rege);

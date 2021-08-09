@@ -10,9 +10,9 @@ public class GeccoClassLoader extends ClassLoader {
 	
 	private static final Log LOG = LogFactory.getLog(GeccoClassLoader.class);
 	
-	private Map<String, Class<?>> classes;
+	protected Map<String, Class<?>> classes;
 	
-	private static GeccoClassLoader instance;
+	protected static GeccoClassLoader instance;
 	
 	/**
 	 * 创建一个新的GeccoClassLoader

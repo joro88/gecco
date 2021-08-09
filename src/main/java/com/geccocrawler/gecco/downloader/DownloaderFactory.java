@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,10 +17,13 @@ public abstract class DownloaderFactory {
 	
 	public static final String DEFAULT_DWONLODER = "httpClientDownloader";
 	
-	private Map<String, Downloader> downloaders;
+	protected Map<String, Downloader> downloaders;
 	
-	public DownloaderFactory(Reflections reflections) {
+	protected GeccoFactory geccoFactory;
+    
+	public DownloaderFactory(Reflections reflections, GeccoFactory geccoFactory) {
 		this.downloaders = new HashMap<String, Downloader>();
+        this.geccoFactory = geccoFactory;
 		Set<Class<?>> classes = reflections.getTypesAnnotatedWith(com.geccocrawler.gecco.annotation.Downloader.class);
 		for(Class<?> downloaderClass : classes) {
 			com.geccocrawler.gecco.annotation.Downloader downloader = (com.geccocrawler.gecco.annotation.Downloader)downloaderClass.getAnnotation(com.geccocrawler.gecco.annotation.Downloader.class);

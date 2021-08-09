@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,49 +45,53 @@ public class SpiderBeanFactory {
 	/**
 	 * 匹配的SpriderBean matchUrl:SpiderBean
 	 */
-	private Map<String, Class<? extends SpiderBean>> spiderBeans;
+	protected Map<String, Class<? extends SpiderBean>> spiderBeans;
 
 	/**
 	 * 匹配的SpiderBean上下文 SpiderBeanClassName:SpiderBeanClass
 	 */
-	private Map<String, SpiderBeanContext> spiderBeanContexts;
+	protected Map<String, SpiderBeanContext> spiderBeanContexts;
 
-	private DownloaderFactory downloaderFactory;
+	protected DownloaderFactory downloaderFactory;
 
-	private DownloaderAOPFactory downloaderAOPFactory;
+	protected DownloaderAOPFactory downloaderAOPFactory;
 
-	private RenderFactory renderFactory;
+	protected RenderFactory renderFactory;
 
-	private PipelineFactory pipelineFactory;
+	protected PipelineFactory pipelineFactory;
+    
+    protected GeccoFactory geccoFactory;
 
 	protected Reflections reflections;
 
 	public SpiderBeanFactory(String classPath) {
-		this(classPath, null);
+		this(classPath, null, null);
 	}
 
-	public SpiderBeanFactory(String classPath, PipelineFactory pipelineFactory) {
+	public SpiderBeanFactory(String classPath, PipelineFactory pipelineFactory, GeccoFactory geccoFactory) {
+        this.geccoFactory = geccoFactory;
+        
 		if (StringUtils.isNotEmpty(classPath)) {
 			reflections = new Reflections(
 					ConfigurationBuilder.build("com.geccocrawler.gecco", classPath, GeccoClassLoader.get())
-							.setMetadataAdapter(new GeccoJavaReflectionAdapter())
+							.setMetadataAdapter( geccoFactory.createGeccoJavaReflectionAdapter(this) )
 							.setExpandSuperTypes(false));
 			// reflections = new Reflections("com.geccocrawler.gecco", classPath);
 		} else {
 			reflections = new Reflections(ConfigurationBuilder.build("com.geccocrawler.gecco", GeccoClassLoader.get())
-					.setMetadataAdapter(new GeccoJavaReflectionAdapter())
+					.setMetadataAdapter( geccoFactory.createGeccoJavaReflectionAdapter(this) )
 					.setExpandSuperTypes(false));
 			// reflections = new Reflections("com.geccocrawler.gecco");
 		}
 		dynamic();
 
-		this.downloaderFactory = new MonitorDownloaderFactory(reflections);
-		this.downloaderAOPFactory = new DownloaderAOPFactory(reflections);
-		this.renderFactory = new MonitorRenderFactory(reflections);
+		this.downloaderFactory = geccoFactory.createMonitorDownloaderFactory(this);
+		this.downloaderAOPFactory = geccoFactory.createDownloaderAOPFactory(this);
+		this.renderFactory = geccoFactory.createMonitorRenderFactory(this);
 		if (pipelineFactory != null) {
 			this.pipelineFactory = pipelineFactory;
 		} else {
-			this.pipelineFactory = new DefaultPipelineFactory(reflections);
+			this.pipelineFactory = geccoFactory.createDefaultPipelineFactory(this);
 		}
 		this.spiderBeans = new ConcurrentHashMap<String, Class<? extends SpiderBean>>();
 		this.spiderBeanContexts = new ConcurrentHashMap<String, SpiderBeanContext>();
@@ -96,7 +101,7 @@ public class SpiderBeanFactory {
 	/**
 	 * 动态增加的spiderBean
 	 */
-	private void dynamic() {
+	protected void dynamic() {
 		GeccoClassLoader gcl = GeccoClassLoader.get();
 		for (String className : gcl.getClasses().keySet()) {
 			reflections.getStore().get(TypeAnnotationsScanner.class.getSimpleName()).put(Gecco.class.getName(),
@@ -104,7 +109,7 @@ public class SpiderBeanFactory {
 		}
 	}
 
-	private void loadSpiderBean(Reflections reflections) {
+	protected void loadSpiderBean(Reflections reflections) {
 		Set<Class<?>> spiderBeanClasses = reflections.getTypesAnnotatedWith(Gecco.class);
 		for (Class<?> spiderBeanClass : spiderBeanClasses) {
 			addSpiderBean(spiderBeanClass);
@@ -170,8 +175,8 @@ public class SpiderBeanFactory {
 		return spiderBeanContexts.get(spider.getName());
 	}
 
-	private SpiderBeanContext initContext(Class<?> spiderBeanClass) {
-		SpiderBeanContext context = new SpiderBeanContext();
+	protected SpiderBeanContext initContext(Class<?> spiderBeanClass) {
+		SpiderBeanContext context = geccoFactory.createSpiderBeanContext(this);
 		// 关联的after、before、downloader
 		downloadContext(context, spiderBeanClass);
 		// 关联的render
@@ -183,7 +188,7 @@ public class SpiderBeanFactory {
 		return context;
 	}
 
-	private void downloadContext(SpiderBeanContext context, Class<?> spiderBeanClass) {
+	protected void downloadContext(SpiderBeanContext context, Class<?> spiderBeanClass) {
 		String geccoName = spiderBeanClass.getName();
 		context.setBeforeDownload(downloaderAOPFactory.getBefore(geccoName));
 		context.setAfterDownload(downloaderAOPFactory.getAfter(geccoName));
@@ -193,7 +198,7 @@ public class SpiderBeanFactory {
 		context.setTimeout(gecco.timeout());
 	}
 
-	private void renderContext(SpiderBeanContext context, Class<?> spiderBeanClass) {
+	protected void renderContext(SpiderBeanContext context, Class<?> spiderBeanClass) {
 		RenderType renderType = RenderType.HTML;
 		if (ReflectUtils.haveSuperType(spiderBeanClass, JsonBean.class)) {
 			renderType = RenderType.JSON;
@@ -202,7 +207,7 @@ public class SpiderBeanFactory {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private void pipelineContext(SpiderBeanContext context, String[] pipelineNames) {
+	protected void pipelineContext(SpiderBeanContext context, String[] pipelineNames) {
 		if (pipelineNames != null && pipelineNames.length > 0) {
 			List<Pipeline> pipelines = new ArrayList<Pipeline>();
 			for (String pipelineName : pipelineNames) {

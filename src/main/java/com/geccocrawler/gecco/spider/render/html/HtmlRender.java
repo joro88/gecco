@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import net.sf.cglib.beans.BeanMap;
 
 import com.geccocrawler.gecco.request.HttpRequest;
@@ -15,20 +16,20 @@ import com.geccocrawler.gecco.spider.render.AbstractRender;
  */
 public class HtmlRender extends AbstractRender {
 	
-	private HtmlFieldRender htmlFieldRender;
+	protected HtmlFieldRender htmlFieldRender;
 	
-	private AjaxFieldRender ajaxFieldRender;
+	protected AjaxFieldRender ajaxFieldRender;
 	
-	private JSVarFieldRender jsVarFieldRender;
+	protected JSVarFieldRender jsVarFieldRender;
 	
-	private ImageFieldRender imageFieldRender;
+	protected ImageFieldRender imageFieldRender;
 	
-	public HtmlRender() {
-		super();
-		this.htmlFieldRender = new HtmlFieldRender();
-		this.ajaxFieldRender = new AjaxFieldRender();
-		this.jsVarFieldRender = new JSVarFieldRender();
-		this.imageFieldRender = new ImageFieldRender();
+	public HtmlRender(GeccoFactory factory) {
+		super(factory);
+        htmlFieldRender = factory.createHtmlFieldRender( this );
+        ajaxFieldRender = factory.createAjaxFieldRender( this );
+        jsVarFieldRender = factory.createJSVarFieldRender( this );
+        imageFieldRender = factory.createImageFieldRender( this );
 	}
 
 	@Override

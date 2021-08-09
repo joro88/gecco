@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader.proxy;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -32,11 +33,15 @@ public class FileProxys implements Proxys {
 	
 	private static Log log = LogFactory.getLog(FileProxys.class);
 	
-	private ConcurrentLinkedQueue<Proxy> proxyQueue;
+    protected GeccoFactory factory;
+    
+	protected ConcurrentLinkedQueue<Proxy> proxyQueue;
 	
-	private Map<String, Proxy> proxys = null;
+	protected Map<String, Proxy> proxys = null;
 	
-	public FileProxys() {
+	public FileProxys(GeccoFactory factory) {
+        this.factory = factory;
+        
 		try {
 			proxys = new ConcurrentHashMap<String, Proxy>();
 			proxyQueue = new ConcurrentLinkedQueue<Proxy>();
@@ -69,7 +74,7 @@ public class FileProxys implements Proxys {
 
 	@Override
 	public boolean addProxy(String host, int port, String src) {
-		Proxy proxy = new Proxy(host, port);
+		Proxy proxy = factory.createProxy(host, port, src, this);
 		if(StringUtils.isNotEmpty(src)) {
 			proxy.setSrc(src);
 		}
@@ -105,7 +110,7 @@ public class FileProxys implements Proxys {
 		}
 	}
 	
-	private void reProxy(Proxy proxy, long success, long failure) {
+	protected void reProxy(Proxy proxy, long success, long failure) {
 		long sum = failure + success;
 		if(sum < 20) {
 			proxyQueue.offer(proxy);

@@ -10,9 +10,9 @@ import com.geccocrawler.gecco.annotation.GeccoClass;
 
 public class DownloaderAOPFactory {
 	
-	private Map<String, BeforeDownload> beforeDownloads;
+	protected Map<String, BeforeDownload> beforeDownloads;
 	
-	private Map<String, AfterDownload> afterDownloads;
+	protected Map<String, AfterDownload> afterDownloads;
 	
 	public DownloaderAOPFactory(Reflections reflections) {
 		this.beforeDownloads = new HashMap<String, BeforeDownload>();

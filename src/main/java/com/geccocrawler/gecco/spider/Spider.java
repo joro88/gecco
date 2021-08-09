@@ -30,15 +30,15 @@ public class Spider implements Runnable {
 	
 	private static Log log = LogFactory.getLog(Spider.class);
 	
-	private CountDownLatch pauseCountDown;
+	protected CountDownLatch pauseCountDown;
 	
-	private volatile boolean stop;
+	protected volatile boolean stop;
 	
-	private volatile boolean pause;
+	protected volatile boolean pause;
 	
-	private GeccoEngine engine;
+	protected GeccoEngine engine;
 	
-	private Scheduler spiderScheduler;
+	protected Scheduler spiderScheduler;
 	
 	/**
 	 * 当前待渲染的bean
@@ -47,7 +47,7 @@ public class Spider implements Runnable {
 	
 	public Spider(GeccoEngine engine) {
 		this.engine = engine;
-		this.spiderScheduler = new UniqueSpiderScheduler();
+		this.spiderScheduler = engine.getFactory().createUniqueSpiderScheduler( this );
 		this.pause = false;
 		this.stop = false;
 	}
@@ -167,7 +167,7 @@ public class Spider implements Runnable {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void pipelines(SpiderBean spiderBean, SpiderBeanContext context) {
+	protected void pipelines(SpiderBean spiderBean, SpiderBeanContext context) {
 		if(spiderBean == null) {
 			return ;
 		}
@@ -179,7 +179,7 @@ public class Spider implements Runnable {
 		}
 	}
 	
-	private void interval() {
+	protected void interval() {
 		int interval = engine.getInterval();
 		if(interval > 0) {
 			try {
@@ -194,12 +194,12 @@ public class Spider implements Runnable {
 	 * @param request
 	 * @return
 	 */
-	private HttpResponse defaultDownload(HttpRequest request) throws DownloadException {
+	protected HttpResponse defaultDownload(HttpRequest request) throws DownloadException {
 		HttpResponse response = download(null, request);
 		return response;
 	}
 	
-	private HttpResponse download(SpiderBeanContext context, HttpRequest request) throws DownloadException {
+	protected HttpResponse download(SpiderBeanContext context, HttpRequest request) throws DownloadException {
 			Downloader currDownloader = null;
 			BeforeDownload before = null;
 			AfterDownload after = null;
@@ -228,7 +228,7 @@ public class Spider implements Runnable {
 	 * @param interval
 	 * @return
 	 */
-	private int randomInterval(int interval) {
+	protected int randomInterval(int interval) {
 		int min = interval - 1000;
 		if(min < 1) {
 			min = 1;

@@ -37,17 +37,17 @@ public class JavassistDynamicBean implements DynamicBean {
 
 	public static final String JsonBean = "json";
 
-	private static ClassPool pool;
+	protected static ClassPool pool;
 	static {
 		pool = ClassPool.getDefault();
 		pool.insertClassPath(new ClassClassPath(JavassistDynamicBean.class));
 	}
 
-	private CtClass clazz;
+	protected CtClass clazz;
 
-	private ClassFile cfile;
+	protected ClassFile cfile;
 
-	private ConstPool cpool;
+	protected ConstPool cpool;
 
 	public JavassistDynamicBean(String spiderBeanName) {
 		try {
@@ -199,7 +199,7 @@ public class JavassistDynamicBean implements DynamicBean {
 		return field(fieldName, FieldType.type(fieldClass));
 	}
 
-	private void getter(String fieldName, CtField field) {
+	protected void getter(String fieldName, CtField field) {
 		try {
 			CtMethod m = CtNewMethod.getter("get" + StringUtils.capitalize(fieldName), field);
 			clazz.addMethod(m);
@@ -208,7 +208,7 @@ public class JavassistDynamicBean implements DynamicBean {
 		}
 	}
 
-	private void setter(String fieldName, CtField field) {
+	protected void setter(String fieldName, CtField field) {
 		try {
 			CtMethod m = CtNewMethod.setter("set" + StringUtils.capitalize(fieldName), field);
 			clazz.addMethod(m);

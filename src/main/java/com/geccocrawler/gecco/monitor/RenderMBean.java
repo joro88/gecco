@@ -8,7 +8,7 @@ import com.geccocrawler.gecco.annotation.MBean;
 @MBean("render")
 public class RenderMBean {
 	
-	private String statistics;
+	protected String statistics;
 
 	@Managed
 	public String getStatistics() {

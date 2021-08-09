@@ -11,7 +11,7 @@ import com.geccocrawler.gecco.spider.SpiderBean;
 
 public class DefaultPipelineFactory implements PipelineFactory {
 
-	private Map<String, Pipeline<? extends SpiderBean>> pipelines;
+	protected Map<String, Pipeline<? extends SpiderBean>> pipelines;
 
 	@SuppressWarnings({ "unchecked" })
 	public DefaultPipelineFactory(Reflections reflections) {

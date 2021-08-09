@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.monitor;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Method;
 
 import com.geccocrawler.gecco.downloader.DownloadException;
@@ -11,19 +12,25 @@ import net.sf.cglib.proxy.MethodProxy;
 
 public class DownloadMointorIntercetor implements MethodInterceptor {
 
+    protected GeccoFactory factory;
+
+    public DownloadMointorIntercetor(GeccoFactory factory) {
+        this.factory = factory;
+    }
+    
 	@Override
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 		if(method.getName().equals("download")) {
 			HttpRequest request = (HttpRequest)args[0];
 			try {
 				Object o = proxy.invokeSuper(obj, args);
-				DownloadMonitor.incrSuccess(request.getUrl());
+				DownloadMonitor.incrSuccess(request.getUrl(), factory);
 				return o;
 			} catch(DownloadServerException ex) {
-				DownloadMonitor.incrServerError(request.getUrl());
+				DownloadMonitor.incrServerError(request.getUrl(), factory);
 				throw ex;
 			} catch(DownloadException ex) {
-				DownloadMonitor.incrException(request.getUrl());
+				DownloadMonitor.incrException(request.getUrl(), factory);
 				throw ex;
 			}
 			

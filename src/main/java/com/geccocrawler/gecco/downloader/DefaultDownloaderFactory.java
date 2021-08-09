@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import org.reflections.Reflections;
 
 /**
@@ -10,8 +11,8 @@ import org.reflections.Reflections;
  */
 public class DefaultDownloaderFactory extends DownloaderFactory {
 
-	public DefaultDownloaderFactory(Reflections reflections) {
-		super(reflections);
+	public DefaultDownloaderFactory(Reflections reflections, GeccoFactory factory) {
+		super(reflections, factory);
 	}
 
 	protected Object createDownloader(Class<?> downloaderClass) throws Exception {

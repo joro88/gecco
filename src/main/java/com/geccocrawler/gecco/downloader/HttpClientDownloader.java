@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +55,7 @@ import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
 import com.geccocrawler.gecco.spider.SpiderThreadLocal;
 import com.geccocrawler.gecco.utils.UrlUtils;
+import org.apache.http.conn.HttpClientConnectionManager;
 
 /**
  * 利用httpclient下载
@@ -66,53 +68,42 @@ public class HttpClientDownloader extends AbstractDownloader {
 	
 	private static Log log = LogFactory.getLog(HttpClientDownloader.class);
 	
-	private CloseableHttpClient httpClient;
+	protected CloseableHttpClient httpClient;
 	
-	private HttpClientContext cookieContext;
+	protected HttpClientContext cookieContext;
 	
-	public HttpClientDownloader() {
+	public HttpClientDownloader(GeccoFactory factory) {
+        super( factory );
+                
+        this.factory = factory;
 		
-		cookieContext = HttpClientContext.create();
-		cookieContext.setCookieStore(new BasicCookieStore());
+		cookieContext = factory.createCookieHttpClientContext( this );
+		cookieContext.setCookieStore( factory.createCookieStore(this) );
 		
 		Registry<ConnectionSocketFactory> socketFactoryRegistry = null;
 		try {
 			//构造一个信任所有ssl证书的httpclient
-			SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, new TrustStrategy() {
-				@Override
-				public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-					return true;
-				}
-			}).build();
-			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
-			socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-			           .register("http", PlainConnectionSocketFactory.getSocketFactory())  
+			SSLContext sslContext = factory.createSSLContext(this);
+			ConnectionSocketFactory sslsf = factory.createHttpsConnectionSocketFactory(sslContext, this);
+			socketFactoryRegistry = factory.createSocketFactoryRegistryBuilder(this)
+			           .register("http", factory.createHttpConnectionSocketFactory(this) )  
 			           .register("https", sslsf)  
 			           .build();
 		} catch(Exception ex) {
-			socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-            .register("http", PlainConnectionSocketFactory.getSocketFactory())
-            .register("https", SSLConnectionSocketFactory.getSocketFactory())
+			socketFactoryRegistry = factory.createSocketFactoryRegistryBuilder(this)
+            .register("http", factory.createHttpConnectionSocketFactoryFallback(this) )
+            .register("https", factory.createHttpsConnectionSocketFactoryFallback( this ))
             .build();
 		}
-		RequestConfig clientConfig = RequestConfig.custom().setRedirectsEnabled(false).build();
-		PoolingHttpClientConnectionManager syncConnectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-		syncConnectionManager.setMaxTotal(1000);
-		syncConnectionManager.setDefaultMaxPerRoute(50);
-		httpClient = HttpClientBuilder.create()
+		RequestConfig clientConfig = factory.createRequestConfig( this );
+        HttpClientConnectionManager syncConnectionManager = 
+                factory.createConnectionManager(socketFactoryRegistry, this);
+        
+		httpClient = factory.createHttpClientBuilder(this)
 				.setDefaultRequestConfig(clientConfig)
 				.setConnectionManager(syncConnectionManager)
-				.setRetryHandler(new HttpRequestRetryHandler() {
-					@Override
-					public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
-						int retryCount = SpiderThreadLocal.get().getEngine().getRetry();
-						boolean retry = (executionCount <= retryCount);
-						if(log.isDebugEnabled() && retry) {
-							log.debug("retry : " + executionCount);
-						}
-						return retry;
-					}
-				}).build();
+				.setRetryHandler(factory.createRetryHandler(this))
+                .build();
 	}
 
 	@Override
@@ -120,10 +111,9 @@ public class HttpClientDownloader extends AbstractDownloader {
 		if(log.isDebugEnabled()) {
 			log.debug("downloading..." + request.getUrl());
 		}
-		HttpRequestBase reqObj = null;
+		HttpRequestBase reqObj = factory.createApacheRequestObject(request, this);
 		if(request instanceof HttpPostRequest) {//post
 			HttpPostRequest post = (HttpPostRequest)request;
-			reqObj = new HttpPost(post.getUrl());
 			//post fields
 			List<NameValuePair> fields = new ArrayList<NameValuePair>();
 			for(Map.Entry<String, String> entry : post.getFields().entrySet()) {
@@ -131,13 +121,13 @@ public class HttpClientDownloader extends AbstractDownloader {
 				fields.add(nvp);
 			}
 			try {
-				HttpEntity entity = new UrlEncodedFormEntity(fields, "UTF-8");
+				HttpEntity entity = factory.createUrlEncodedFormEntity(fields, this);
 				((HttpEntityEnclosingRequestBase) reqObj).setEntity(entity);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		} else {//get
-			reqObj = new HttpGet(request.getUrl());
+			// reqObj = new HttpGet(request.getUrl()); -> object created by factory
 		}
 		//header
 		boolean isMobile = SpiderThreadLocal.get().getEngine().isMobile();
@@ -146,7 +136,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 			reqObj.setHeader(entry.getKey(), entry.getValue());
 		}
 		//request config
-		RequestConfig.Builder builder = RequestConfig.custom()
+		RequestConfig.Builder builder = factory.createRequestConfigBuilder(request, this)
 		.setConnectionRequestTimeout(1000)//从连接池获取连接的超时时间
 		.setSocketTimeout(timeout)//获取内容的超时时间
 		.setConnectTimeout(timeout)//建立socket连接的超时时间
@@ -174,7 +164,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 			}
 			org.apache.http.HttpResponse response = httpClient.execute(reqObj, cookieContext);
 			int status = response.getStatusLine().getStatusCode();
-			HttpResponse resp = new HttpResponse();
+			HttpResponse resp = factory.createApacheHttpResponse(request, reqObj, this);
 			resp.setStatus(status);
 			if(status == 302 || status == 301) {
 				String redirectUrl = response.getFirstHeader("Location").getValue();
@@ -254,7 +244,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         
     }
 	
-	private boolean isImage(String contentType) {
+	protected boolean isImage(String contentType) {
 		if(contentType == null) {
 			return false;
 		}

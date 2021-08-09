@@ -10,7 +10,7 @@ import com.geccocrawler.gecco.annotation.FieldRenderName;
 
 public class CustomFieldRenderFactory {
 	
-	private Map<String, CustomFieldRender> map;
+	protected Map<String, CustomFieldRender> map;
 	
 	public CustomFieldRenderFactory(Reflections reflections) {
 		this.map = new HashMap<String, CustomFieldRender>();
