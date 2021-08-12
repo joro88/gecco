@@ -102,9 +102,6 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	private GeccoEngine() {
 		this.retry = 3;
-        factory = createFactory();
-        factory.setEngine(this);
-        mediator = factory.createMediator();
 	}
 
 	/**
@@ -133,10 +130,6 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		return ge;
 	}
     
-    public GeccoFactory createFactory() {
-        return new GeccoFactory();
-    }
-
 	@Deprecated
 	public GeccoEngine start(String url) {
         HttpGetRequest httpGetRequest = factory.createHttpGetRequest(url);
@@ -506,8 +499,11 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
         return factory;
     }
 
-    public void setFactory(GeccoFactory factory) {
+    public GeccoEngine setFactory(GeccoFactory factory) {
         this.factory = factory;
+        factory.setEngine(this);
+        mediator = factory.createMediator();
+        return this;
     }
     
     public Object getMediator() {

@@ -153,6 +153,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 				builder.setConnectTimeout(1000);//如果走代理，连接超时时间固定为1s
 			}
 		}
+        patchRequestConfigBuilder(builder, request, timeout);
 		reqObj.setConfig(builder.build());
 		//request and response
 		try {
@@ -162,6 +163,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 				cookie.setDomain(reqObj.getURI().getHost());
 				cookieContext.getCookieStore().addCookie(cookie);
 			}
+            patchBeforeClientExecute(builder, request, reqObj, timeout, cookieContext);
 			org.apache.http.HttpResponse response = httpClient.execute(reqObj, cookieContext);
 			int status = response.getStatusLine().getStatusCode();
 			HttpResponse resp = factory.createApacheHttpResponse(request, reqObj, this);
@@ -253,4 +255,17 @@ public class HttpClientDownloader extends AbstractDownloader {
 		}
 		return false;
 	}
+
+    protected void patchRequestConfigBuilder(RequestConfig.Builder builder, HttpRequest request, int timeout) {
+        // it could be overloaded by child classes
+    }
+
+    protected void patchBeforeClientExecute(
+            RequestConfig.Builder builder, 
+            HttpRequest request, 
+            HttpRequestBase reqObj, 
+            int timeout, 
+            HttpClientContext clientContent) {
+        // it could be overloaded by child classes
+    }
 }

@@ -2,6 +2,7 @@ package com.geccocrawler.gecco;
 
 import com.geccocrawler.gecco.downloader.AbstractDownloader;
 import com.geccocrawler.gecco.downloader.DownloaderAOPFactory;
+import com.geccocrawler.gecco.downloader.DownloaderFactory;
 import com.geccocrawler.gecco.downloader.MonitorDownloaderFactory;
 import com.geccocrawler.gecco.downloader.proxy.FileProxys;
 import com.geccocrawler.gecco.downloader.proxy.Proxy;
@@ -91,6 +92,10 @@ public class GeccoFactory {
      */
     protected GeccoEngine engine;
 
+    public GeccoFactory(GeccoEngine engine) {
+        this.engine = engine;
+    }
+    
     public GeccoEngine getEngine() {
         return engine;
     }
@@ -390,6 +395,10 @@ public class GeccoFactory {
      * the object */
     public Class<? extends StartRequestList> getStartRequestListClass() {
         return StartRequestList.class;
+    }
+    
+    public String getDefaultDownloaderAnnotationValue() {
+        return DownloaderFactory.DEFAULT_DWONLODER;
     }
     
     public Object createMediator() {

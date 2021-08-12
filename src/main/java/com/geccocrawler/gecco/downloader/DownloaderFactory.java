@@ -49,7 +49,8 @@ public abstract class DownloaderFactory {
 	}
 	
 	public Downloader defaultDownloader() {
-		return downloaders.get(DEFAULT_DWONLODER);
+        String annotationValue = geccoFactory.getDefaultDownloaderAnnotationValue();
+		return downloaders.get(annotationValue);
 	}
 
 	protected abstract Object createDownloader(Class<?> downloaderClass) throws Exception;
