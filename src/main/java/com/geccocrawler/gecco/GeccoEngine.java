@@ -87,6 +87,8 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 	protected String jmxPrefix;
     
     protected GeccoFactory factory;
+    
+    protected Object mediator;
 
 	protected V ret;//callable 返回值
 
@@ -102,6 +104,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		this.retry = 3;
         factory = createFactory();
         factory.setEngine(this);
+        mediator = factory.createMediator();
 	}
 
 	/**
@@ -505,6 +508,14 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
     public void setFactory(GeccoFactory factory) {
         this.factory = factory;
+    }
+    
+    public Object getMediator() {
+        return mediator;
+    }
+
+    public void setMediator(Object mediator) {
+        this.mediator = mediator;
     }
 
 	public EventListener getEventListener() {

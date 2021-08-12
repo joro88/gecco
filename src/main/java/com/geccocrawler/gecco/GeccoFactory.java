@@ -392,4 +392,7 @@ public class GeccoFactory {
         return StartRequestList.class;
     }
     
+    public Object createMediator() {
+        return null;
+    }
 }

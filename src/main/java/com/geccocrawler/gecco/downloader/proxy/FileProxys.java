@@ -40,6 +40,8 @@ public class FileProxys implements Proxys {
 	protected Map<String, Proxy> proxys = null;
 	
 	public FileProxys(GeccoFactory factory) {
+        log.info("Init FileProxys()");
+        
         this.factory = factory;
         
 		try {
