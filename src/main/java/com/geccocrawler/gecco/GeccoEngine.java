@@ -100,7 +100,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		this.ret = ret;
 	}
 
-	private GeccoEngine() {
+	protected GeccoEngine() {
 		this.retry = 3;
 	}
 

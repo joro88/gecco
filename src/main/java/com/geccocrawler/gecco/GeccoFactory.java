@@ -92,8 +92,7 @@ public class GeccoFactory {
      */
     protected GeccoEngine engine;
 
-    public GeccoFactory(GeccoEngine engine) {
-        this.engine = engine;
+    public GeccoFactory() {
     }
     
     public GeccoEngine getEngine() {
