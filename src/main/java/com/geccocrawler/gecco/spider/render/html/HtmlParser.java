@@ -127,7 +127,7 @@ public class HtmlParser {
 		// table
 		HttpResponse subResponse = factory.createSimpleHttpResponse(subHtml);
 		Render render = RenderContext.getRender(RenderType.HTML);
-		return render.inject(clazz, request, subResponse);
+		return render.inject(clazz, request, subResponse, factory.getEngine());
 	}
 
 	public List<SpiderBean> $beanList(String selector, HttpRequest request, Class<? extends SpiderBean> clazz) {
@@ -137,7 +137,7 @@ public class HtmlParser {
 			// table
 			HttpResponse subResponse = factory.createSimpleHttpResponse(el);
 			Render render = RenderContext.getRender(RenderType.HTML);
-			SpiderBean subBean = render.inject(clazz, request, subResponse);
+			SpiderBean subBean = render.inject(clazz, request, subResponse, factory.getEngine());
 			list.add(subBean);
 		}
 		return list;

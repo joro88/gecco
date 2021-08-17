@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render;
 
+import com.geccocrawler.gecco.GeccoEngine;
 import com.geccocrawler.gecco.GeccoFactory;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -55,7 +56,7 @@ public abstract class AbstractRender implements Render {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response) {
+	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response, GeccoEngine engine) {
 		try {
 			SpiderBean bean = clazz.newInstance();
 			BeanMap beanMap = BeanMap.create(bean);

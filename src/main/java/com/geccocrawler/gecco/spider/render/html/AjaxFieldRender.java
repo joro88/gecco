@@ -69,7 +69,7 @@ public class AjaxFieldRender implements FieldRender {
 				type = RenderType.JSON;
 			}
 			Render render = RenderContext.getRender(type);
-			return render.inject(clazz, subRequest, subReponse);
+			return render.inject(clazz, subRequest, subReponse, factory.getEngine());
 		} catch (DownloadException ex) {
 			//throw new FieldRenderException(field, ex.getMessage(), ex);
 			FieldRenderException.log(field, ex.getMessage(), ex);

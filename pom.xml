@@ -7,7 +7,7 @@
 
 	<name>Gecco.Injectable</name>
 	<description>Easy to use lightweight web crawler</description>
-	<!--url>https://github.com/xtuhcy/gecco</url-->
+	<url>https://github.com/joro88/gecco.injectable</url>
 
 	<dependencies>
 		<dependency>

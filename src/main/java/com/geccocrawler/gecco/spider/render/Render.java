@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render;
 
+import com.geccocrawler.gecco.GeccoEngine;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
 import com.geccocrawler.gecco.spider.SpiderBean;
@@ -12,7 +13,7 @@ import com.geccocrawler.gecco.spider.SpiderBean;
  */
 public interface Render {
 
-	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response);
+	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response, GeccoEngine engine);
 	
 	public void requests(HttpRequest request, SpiderBean bean);
 }

@@ -129,7 +129,7 @@ public class JsonFieldRender implements FieldRender {
 		} else {
 			render = RenderContext.getRender(RenderType.HTML);
 		}
-		SpiderBean subBean = render.inject(genericClass, request, subResponse);
+		SpiderBean subBean = render.inject(genericClass, request, subResponse, factory.getEngine());
 		return subBean;
 	}
 
