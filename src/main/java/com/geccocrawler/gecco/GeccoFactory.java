@@ -1,3 +1,6 @@
+/**
+ * Copyright: github.com/joro88
+ * */
 package com.geccocrawler.gecco;
 
 import com.geccocrawler.gecco.downloader.AbstractDownloader;
@@ -8,6 +11,7 @@ import com.geccocrawler.gecco.downloader.proxy.FileProxys;
 import com.geccocrawler.gecco.downloader.proxy.Proxy;
 import com.geccocrawler.gecco.downloader.proxy.Proxys;
 import com.geccocrawler.gecco.dynamic.GeccoJavaReflectionAdapter;
+import com.geccocrawler.gecco.listener.EventListener;
 import com.geccocrawler.gecco.monitor.DownloadMointorIntercetor;
 import com.geccocrawler.gecco.monitor.DownloadMonitor;
 import com.geccocrawler.gecco.monitor.DownloadStatistics;
@@ -82,7 +86,7 @@ import org.reflections.Reflections;
 
 /**
  *
- * @author Joro88
+ * @author github.com/Joro88
  */
 public class GeccoFactory {
 	private static Log log = LogFactory.getLog(GeccoFactory.class);
@@ -91,6 +95,7 @@ public class GeccoFactory {
      * GeccoEngine should be set ASAP. E.g. in constructor of GeccoEngine
      */
     protected GeccoEngine engine;
+    protected GeccoMediator mediator;
 
     public GeccoFactory() {
     }
@@ -101,8 +106,14 @@ public class GeccoFactory {
 
     public void setEngine(GeccoEngine engine) {
         this.engine = engine;
+        this.mediator = engine.getMediator();
+        
     }
     
+    public GeccoMediator getMediator() {
+        return mediator;
+    }
+
     public PipelineFactory createPipelineFactory(Reflections reflections){
         return new DefaultPipelineFactory(reflections);
     } 
@@ -268,7 +279,7 @@ public class GeccoFactory {
             String src,
             Proxys proxys
     ) {
-        return new Proxy(host, port, this);
+        return new Proxy(host, port, mediator);
     }
 
     public HttpHost createApacheHttpHost( String host, int port, Proxy proxy ) {
@@ -400,7 +411,12 @@ public class GeccoFactory {
         return DownloaderFactory.DEFAULT_DWONLODER;
     }
     
-    public Object createMediator() {
+    public GeccoMediator createMediator() {
         return null;
     }
+
+    public EventListener createEventListener() {
+        return null;
+    }
+
 }
