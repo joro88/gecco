@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +33,10 @@ import net.sf.cglib.beans.BeanMap;
  *
  */
 public class AjaxFieldRender implements FieldRender {
-    protected GeccoFactory factory;
+    protected GeccoMediator mediator;
 
-    public AjaxFieldRender(GeccoFactory factory) {
-        this.factory = factory;
+    public AjaxFieldRender(GeccoMediator mediator) {
+        this.mediator = mediator;
     }
 
 	@Override
@@ -69,7 +70,7 @@ public class AjaxFieldRender implements FieldRender {
 				type = RenderType.JSON;
 			}
 			Render render = RenderContext.getRender(type);
-			return render.inject(clazz, subRequest, subReponse, factory.getEngine());
+			return render.inject(clazz, subRequest, subReponse);
 		} catch (DownloadException ex) {
 			//throw new FieldRenderException(field, ex.getMessage(), ex);
 			FieldRenderException.log(field, ex.getMessage(), ex);

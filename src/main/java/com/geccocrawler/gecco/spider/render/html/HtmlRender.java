@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import net.sf.cglib.beans.BeanMap;
 
 import com.geccocrawler.gecco.request.HttpRequest;
@@ -24,8 +25,9 @@ public class HtmlRender extends AbstractRender {
 	
 	protected ImageFieldRender imageFieldRender;
 	
-	public HtmlRender(GeccoFactory factory) {
-		super(factory);
+	public HtmlRender(GeccoMediator mediator) {
+		super(mediator);
+        GeccoFactory factory = mediator.getFactory();
         htmlFieldRender = factory.createHtmlFieldRender( this );
         ajaxFieldRender = factory.createAjaxFieldRender( this );
         jsVarFieldRender = factory.createJSVarFieldRender( this );

@@ -119,7 +119,7 @@ public class GeccoFactory {
     } 
 
     public SpiderBeanFactory createSpiderBeanFactory(String classpath, final PipelineFactory pipelineFactory) {
-        return new SpiderBeanFactory(classpath, pipelineFactory, this);
+        return new SpiderBeanFactory(classpath, pipelineFactory, mediator);
     }
     
     public CookieStore createCookieStore( final AbstractDownloader downloader ) {
@@ -270,7 +270,7 @@ public class GeccoFactory {
             Class<?> downloaderClass,
             final MonitorDownloaderFactory monitorDownloaderFactory
     ){
-        return new DownloadMointorIntercetor(this);
+        return new DownloadMointorIntercetor(mediator);
     }
     
     public Proxy createProxy (
@@ -305,7 +305,7 @@ public class GeccoFactory {
     }
     
     public Proxys createProxys() {
-        return new FileProxys(this);
+        return new FileProxys(mediator);
     }
     
     public Scheduler createScheduler() {
@@ -328,7 +328,7 @@ public class GeccoFactory {
     }
     
     public RenderMointorIntercetor createRenderMointorIntercetor( final MonitorRenderFactory mrf ) {
-        return new RenderMointorIntercetor(this);
+        return new RenderMointorIntercetor(mediator);
     }
 
     public RequestFieldRender createRequestFieldRender( final AbstractRender renderer ) {
@@ -340,31 +340,31 @@ public class GeccoFactory {
     }
     
     public JsonFieldRender createJsonFieldRender( final Render render ) {
-        return new JsonFieldRender(this);
+        return new JsonFieldRender(mediator);
     }
     
     public HtmlRender createHtmlRender(final RenderFactory rf){
-        return new HtmlRender( this );
+        return new HtmlRender( mediator );
     }
     
     public JsonRender createJsonRender(final RenderFactory rf) {
-		return new JsonRender( this );
+		return new JsonRender( mediator );
     }
     
     public AjaxFieldRender createAjaxFieldRender(final Render r) {
-        return new AjaxFieldRender( this );
+        return new AjaxFieldRender( mediator );
     }
 
     public HtmlFieldRender createHtmlFieldRender(final Render r) {
-        return new HtmlFieldRender( this );
+        return new HtmlFieldRender( mediator );
     }
 
     public JSVarFieldRender createJSVarFieldRender( final Render r ) {
-        return new JSVarFieldRender( this );
+        return new JSVarFieldRender( mediator );
     }
 
     public ImageFieldRender createImageFieldRender( final Render r ) {
-        return new ImageFieldRender( this );
+        return new ImageFieldRender( mediator );
     }
     
     public UniqueSpiderScheduler createUniqueSpiderScheduler(Spider s) {
@@ -376,7 +376,7 @@ public class GeccoFactory {
     }
     
     public MonitorDownloaderFactory createMonitorDownloaderFactory(final SpiderBeanFactory sbf) {
-        return new MonitorDownloaderFactory(sbf.getReflections(), this);
+        return new MonitorDownloaderFactory(sbf.getReflections(), mediator);
     }
             
     public DownloaderAOPFactory createDownloaderAOPFactory(final SpiderBeanFactory sbf) {
@@ -384,7 +384,7 @@ public class GeccoFactory {
     } 
 
     public MonitorRenderFactory createMonitorRenderFactory(final SpiderBeanFactory sbf) {
-        return new MonitorRenderFactory(sbf.getReflections(), this);
+        return new MonitorRenderFactory(sbf.getReflections(), mediator);
     }
     
     public DefaultPipelineFactory createDefaultPipelineFactory(final SpiderBeanFactory sbf) {
@@ -396,7 +396,7 @@ public class GeccoFactory {
     }
     
     public HtmlParser createHtmlParser( String baseUri, String content, Object caller ) {
-        return new HtmlParser(baseUri, content, this);
+        return new HtmlParser(baseUri, content, mediator);
     }
     
     

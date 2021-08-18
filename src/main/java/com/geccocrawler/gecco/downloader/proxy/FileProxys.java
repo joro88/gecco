@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.downloader.proxy;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -33,16 +34,18 @@ public class FileProxys implements Proxys {
 	
 	private static Log log = LogFactory.getLog(FileProxys.class);
 	
+    protected GeccoMediator mediator;
     protected GeccoFactory factory;
     
 	protected ConcurrentLinkedQueue<Proxy> proxyQueue;
 	
 	protected Map<String, Proxy> proxys = null;
 	
-	public FileProxys(GeccoFactory factory) {
+	public FileProxys(GeccoMediator mediator) {
         log.info("Init FileProxys()");
         
-        this.factory = factory;
+        this.mediator = mediator;
+        this.factory = mediator.getFactory();
         
 		try {
 			proxys = new ConcurrentHashMap<String, Proxy>();

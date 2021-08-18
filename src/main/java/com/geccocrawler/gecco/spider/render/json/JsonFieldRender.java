@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import com.geccocrawler.gecco.annotation.JSONPath;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
@@ -33,10 +34,10 @@ import com.geccocrawler.gecco.utils.ReflectUtils;
 import net.sf.cglib.beans.BeanMap;
 
 public class JsonFieldRender implements FieldRender {
-    protected GeccoFactory factory;
+    protected GeccoMediator mediator;
 
-    public JsonFieldRender(GeccoFactory factory) {
-        this.factory = factory;
+    public JsonFieldRender(GeccoMediator mediator) {
+        this.mediator = mediator;
     }
     
     @Override
@@ -122,14 +123,14 @@ public class JsonFieldRender implements FieldRender {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected SpiderBean spiderBeanRender(Object src, Class genericClass, HttpRequest request) {
-		HttpResponse subResponse = factory.createSimpleHttpResponse(src.toString());
+		HttpResponse subResponse = mediator.getFactory().createSimpleHttpResponse(src.toString());
 		Render render = null;
 		if(ReflectUtils.haveSuperType(genericClass, JsonBean.class)) {
 			render = RenderContext.getRender(RenderType.JSON);
 		} else {
 			render = RenderContext.getRender(RenderType.HTML);
 		}
-		SpiderBean subBean = render.inject(genericClass, request, subResponse, factory.getEngine());
+		SpiderBean subBean = render.inject(genericClass, request, subResponse);
 		return subBean;
 	}
 

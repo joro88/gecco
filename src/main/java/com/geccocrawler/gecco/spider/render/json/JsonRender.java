@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render.json;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import net.sf.cglib.beans.BeanMap;
 
 import com.geccocrawler.gecco.request.HttpRequest;
@@ -18,8 +19,9 @@ public class JsonRender extends AbstractRender {
 	
 	protected JsonFieldRender jsonFieldRender;
 	
-	public JsonRender(GeccoFactory factory) {
-		super( factory );
+	public JsonRender(GeccoMediator mediator) {
+		super( mediator );
+        GeccoFactory factory = mediator.getFactory();
 		this.jsonFieldRender = factory.createJsonFieldRender( this );
 	}
 

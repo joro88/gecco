@@ -1,6 +1,6 @@
 package com.geccocrawler.gecco.spider.render.html;
 
-import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -29,10 +29,10 @@ import net.sf.cglib.beans.BeanMap;
  *
  */
 public class ImageFieldRender implements FieldRender {
-    protected GeccoFactory factory;
+    protected GeccoMediator mediator;
 
-    public ImageFieldRender(GeccoFactory factory) {
-        this.factory = factory;
+    public ImageFieldRender(GeccoMediator mediator) {
+        this.mediator = mediator;
     }
 
 	@Override

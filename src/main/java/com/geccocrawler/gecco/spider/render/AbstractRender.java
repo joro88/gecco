@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider.render;
 
-import com.geccocrawler.gecco.GeccoEngine;
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +31,7 @@ public abstract class AbstractRender implements Render {
 	
 	private static Log log = LogFactory.getLog(AbstractRender.class);
 
-    protected GeccoFactory geccoFactory;
+    protected GeccoMediator mediator;
     
 	/**
 	 * request请求的注入
@@ -48,15 +48,16 @@ public abstract class AbstractRender implements Render {
 	 */
 	protected CustomFieldRenderFactory customFieldRenderFactory;
 
-	public AbstractRender( GeccoFactory geccoFactory ) {
-        this.geccoFactory = geccoFactory;
-		this.requestFieldRender = geccoFactory.createRequestFieldRender( this );
-		this.requestParameterFieldRender = geccoFactory.createRequestParameterFieldRender( this );
+	public AbstractRender( GeccoMediator mediator ) {
+        this.mediator = mediator;
+        GeccoFactory factory = mediator.getFactory();
+		this.requestFieldRender = factory.createRequestFieldRender( this );
+		this.requestParameterFieldRender = factory.createRequestParameterFieldRender( this );
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response, GeccoEngine engine) {
+	public SpiderBean inject(Class<? extends SpiderBean> clazz, HttpRequest request, HttpResponse response) {
 		try {
 			SpiderBean bean = clazz.newInstance();
 			BeanMap beanMap = BeanMap.create(bean);

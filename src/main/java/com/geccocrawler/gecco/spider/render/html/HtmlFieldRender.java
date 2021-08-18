@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -23,10 +24,10 @@ import net.sf.cglib.beans.BeanMap;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class HtmlFieldRender implements FieldRender {
-    protected GeccoFactory factory;
+    protected GeccoMediator mediator;
 
-    public HtmlFieldRender(GeccoFactory factory) {
-        this.factory = factory;
+    public HtmlFieldRender(GeccoMediator mediator) {
+        this.mediator = mediator;
     }
     
 	@Override
@@ -45,7 +46,7 @@ public class HtmlFieldRender implements FieldRender {
 	protected Object injectHtmlField(HttpRequest request, HttpResponse response, Field field,	Class<? extends SpiderBean> clazz) {
 		HtmlField htmlField = field.getAnnotation(HtmlField.class);
 		String content = response.getContent();
-		HtmlParser parser = factory.createHtmlParser(request.getUrl(), content, this);
+		HtmlParser parser = mediator.getFactory().createHtmlParser(request.getUrl(), content, this);
 		// parser.setLogClass(clazz);
 		String cssPath = htmlField.cssPath();
 		Class<?> type = field.getType();// 属性的类

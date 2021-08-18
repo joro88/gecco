@@ -107,7 +107,7 @@ public class Spider implements Runnable {
 						Render render = context.getRender();
 						
 						SpiderBean spiderBean = null;
-						spiderBean = render.inject(currSpiderBeanClass, request, response, engine);
+						spiderBean = render.inject(currSpiderBeanClass, request, response);
 						
 						//pipelines
 						pipelines(spiderBean, context);

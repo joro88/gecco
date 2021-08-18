@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.monitor;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Method;
 
 import com.geccocrawler.gecco.downloader.DownloadException;
@@ -12,10 +13,12 @@ import net.sf.cglib.proxy.MethodProxy;
 
 public class DownloadMointorIntercetor implements MethodInterceptor {
 
+    protected GeccoMediator mediator;
     protected GeccoFactory factory;
 
-    public DownloadMointorIntercetor(GeccoFactory factory) {
-        this.factory = factory;
+    public DownloadMointorIntercetor(GeccoMediator mediator) {
+        this.mediator = mediator;
+        this.factory = mediator.getFactory();
     }
     
 	@Override

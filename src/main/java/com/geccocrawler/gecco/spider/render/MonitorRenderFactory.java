@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import org.reflections.Reflections;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -10,8 +11,8 @@ import com.geccocrawler.gecco.spider.render.json.JsonRender;
 
 public class MonitorRenderFactory extends RenderFactory {
 
-	public MonitorRenderFactory(Reflections reflections, GeccoFactory factory) {
-		super(reflections, factory);
+	public MonitorRenderFactory(Reflections reflections, GeccoMediator mediator) {
+		super(reflections, mediator);
 	}
 
 	@Override

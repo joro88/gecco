@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.downloader;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,11 +20,13 @@ public abstract class DownloaderFactory {
 	
 	protected Map<String, Downloader> downloaders;
 	
+	protected GeccoMediator mediator;
 	protected GeccoFactory geccoFactory;
     
-	public DownloaderFactory(Reflections reflections, GeccoFactory geccoFactory) {
+	public DownloaderFactory(Reflections reflections, GeccoMediator mediator) {
 		this.downloaders = new HashMap<String, Downloader>();
-        this.geccoFactory = geccoFactory;
+        this.mediator = mediator;
+        this.geccoFactory = mediator.getFactory();
 		Set<Class<?>> classes = reflections.getTypesAnnotatedWith(com.geccocrawler.gecco.annotation.Downloader.class);
 		for(Class<?> downloaderClass : classes) {
 			com.geccocrawler.gecco.annotation.Downloader downloader = (com.geccocrawler.gecco.annotation.Downloader)downloaderClass.getAnnotation(com.geccocrawler.gecco.annotation.Downloader.class);

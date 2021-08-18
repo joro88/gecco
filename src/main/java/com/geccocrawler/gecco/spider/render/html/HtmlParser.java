@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
+import com.geccocrawler.gecco.GeccoMediator;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,11 @@ public class HtmlParser {
 	protected String baseUri;
     
     protected GeccoFactory factory;
+    protected GeccoMediator mediator;
 
-	public HtmlParser(String baseUri, String content, GeccoFactory factory) {
-        this.factory = factory;
+	public HtmlParser(String baseUri, String content, GeccoMediator mediator) {
+        this.mediator = mediator;
+        this.factory = mediator.getFactory();
 		long beginTime = System.currentTimeMillis();
 		log = LogFactory.getLog(HtmlParser.class);
 		this.baseUri = baseUri;
@@ -127,7 +130,7 @@ public class HtmlParser {
 		// table
 		HttpResponse subResponse = factory.createSimpleHttpResponse(subHtml);
 		Render render = RenderContext.getRender(RenderType.HTML);
-		return render.inject(clazz, request, subResponse, factory.getEngine());
+		return render.inject(clazz, request, subResponse);
 	}
 
 	public List<SpiderBean> $beanList(String selector, HttpRequest request, Class<? extends SpiderBean> clazz) {
@@ -137,7 +140,7 @@ public class HtmlParser {
 			// table
 			HttpResponse subResponse = factory.createSimpleHttpResponse(el);
 			Render render = RenderContext.getRender(RenderType.HTML);
-			SpiderBean subBean = render.inject(clazz, request, subResponse, factory.getEngine());
+			SpiderBean subBean = render.inject(clazz, request, subResponse);
 			list.add(subBean);
 		}
 		return list;
