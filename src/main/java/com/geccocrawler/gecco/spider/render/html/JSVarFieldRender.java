@@ -18,7 +18,7 @@ import org.reflections.ReflectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.annotation.JSVar;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
@@ -38,10 +38,10 @@ public class JSVarFieldRender implements FieldRender {
 
 	private static Log log = LogFactory.getLog(JSVarFieldRender.class);
 
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
-    public JSVarFieldRender(GeccoMediator mediator) {
-        this.mediator = mediator;
+    public JSVarFieldRender(GeccoContext context) {
+        this.context = context;
     }
 
 	@Override
@@ -51,7 +51,7 @@ public class JSVarFieldRender implements FieldRender {
 		ScriptableObject scope = cx.initSafeStandardObjects();
 		String windowScript = "var window = {};var document = {};";
 		cx.evaluateString(scope, windowScript, "window", 1, null);
-		HtmlParser parser = mediator.getFactory().createHtmlParser(request.getUrl(), response.getContent(), this);
+		HtmlParser parser = context.getFactory().createHtmlParser(request.getUrl(), response.getContent(), this);
 		for (Element ele : parser.$("script")) {
 			String sc = ele.html();
 			if (StringUtils.isNotEmpty(sc)) {

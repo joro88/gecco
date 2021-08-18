@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +40,11 @@ public class HtmlParser {
 	protected String baseUri;
     
     protected GeccoFactory factory;
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
-	public HtmlParser(String baseUri, String content, GeccoMediator mediator) {
-        this.mediator = mediator;
-        this.factory = mediator.getFactory();
+	public HtmlParser(String baseUri, String content, GeccoContext context) {
+        this.context = context;
+        this.factory = context.getFactory();
 		long beginTime = System.currentTimeMillis();
 		log = LogFactory.getLog(HtmlParser.class);
 		this.baseUri = baseUri;

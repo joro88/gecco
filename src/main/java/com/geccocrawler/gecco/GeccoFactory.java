@@ -95,7 +95,7 @@ public class GeccoFactory {
      * GeccoEngine should be set ASAP. E.g. in constructor of GeccoEngine
      */
     protected GeccoEngine engine;
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
     public GeccoFactory() {
     }
@@ -106,12 +106,12 @@ public class GeccoFactory {
 
     public void setEngine(GeccoEngine engine) {
         this.engine = engine;
-        this.mediator = engine.getMediator();
+        this.context = engine.getContext();
         
     }
     
-    public GeccoMediator getMediator() {
-        return mediator;
+    public GeccoContext getMediator() {
+        return context;
     }
 
     public PipelineFactory createPipelineFactory(Reflections reflections){
@@ -119,7 +119,7 @@ public class GeccoFactory {
     } 
 
     public SpiderBeanFactory createSpiderBeanFactory(String classpath, final PipelineFactory pipelineFactory) {
-        return new SpiderBeanFactory(classpath, pipelineFactory, mediator);
+        return new SpiderBeanFactory(classpath, pipelineFactory, context);
     }
     
     public CookieStore createCookieStore( final AbstractDownloader downloader ) {
@@ -270,7 +270,7 @@ public class GeccoFactory {
             Class<?> downloaderClass,
             final MonitorDownloaderFactory monitorDownloaderFactory
     ){
-        return new DownloadMointorIntercetor(mediator);
+        return new DownloadMointorIntercetor(context);
     }
     
     public Proxy createProxy (
@@ -279,7 +279,7 @@ public class GeccoFactory {
             String src,
             Proxys proxys
     ) {
-        return new Proxy(host, port, mediator);
+        return new Proxy(host, port, context);
     }
 
     public HttpHost createApacheHttpHost( String host, int port, Proxy proxy ) {
@@ -305,7 +305,7 @@ public class GeccoFactory {
     }
     
     public Proxys createProxys() {
-        return new FileProxys(mediator);
+        return new FileProxys(context);
     }
     
     public Scheduler createScheduler() {
@@ -328,7 +328,7 @@ public class GeccoFactory {
     }
     
     public RenderMointorIntercetor createRenderMointorIntercetor( final MonitorRenderFactory mrf ) {
-        return new RenderMointorIntercetor(mediator);
+        return new RenderMointorIntercetor(context);
     }
 
     public RequestFieldRender createRequestFieldRender( final AbstractRender renderer ) {
@@ -340,31 +340,31 @@ public class GeccoFactory {
     }
     
     public JsonFieldRender createJsonFieldRender( final Render render ) {
-        return new JsonFieldRender(mediator);
+        return new JsonFieldRender(context);
     }
     
     public HtmlRender createHtmlRender(final RenderFactory rf){
-        return new HtmlRender( mediator );
+        return new HtmlRender( context );
     }
     
     public JsonRender createJsonRender(final RenderFactory rf) {
-		return new JsonRender( mediator );
+		return new JsonRender( context );
     }
     
     public AjaxFieldRender createAjaxFieldRender(final Render r) {
-        return new AjaxFieldRender( mediator );
+        return new AjaxFieldRender( context );
     }
 
     public HtmlFieldRender createHtmlFieldRender(final Render r) {
-        return new HtmlFieldRender( mediator );
+        return new HtmlFieldRender( context );
     }
 
     public JSVarFieldRender createJSVarFieldRender( final Render r ) {
-        return new JSVarFieldRender( mediator );
+        return new JSVarFieldRender( context );
     }
 
     public ImageFieldRender createImageFieldRender( final Render r ) {
-        return new ImageFieldRender( mediator );
+        return new ImageFieldRender( context );
     }
     
     public UniqueSpiderScheduler createUniqueSpiderScheduler(Spider s) {
@@ -376,7 +376,7 @@ public class GeccoFactory {
     }
     
     public MonitorDownloaderFactory createMonitorDownloaderFactory(final SpiderBeanFactory sbf) {
-        return new MonitorDownloaderFactory(sbf.getReflections(), mediator);
+        return new MonitorDownloaderFactory(sbf.getReflections(), context);
     }
             
     public DownloaderAOPFactory createDownloaderAOPFactory(final SpiderBeanFactory sbf) {
@@ -384,7 +384,7 @@ public class GeccoFactory {
     } 
 
     public MonitorRenderFactory createMonitorRenderFactory(final SpiderBeanFactory sbf) {
-        return new MonitorRenderFactory(sbf.getReflections(), mediator);
+        return new MonitorRenderFactory(sbf.getReflections(), context);
     }
     
     public DefaultPipelineFactory createDefaultPipelineFactory(final SpiderBeanFactory sbf) {
@@ -396,7 +396,7 @@ public class GeccoFactory {
     }
     
     public HtmlParser createHtmlParser( String baseUri, String content, Object caller ) {
-        return new HtmlParser(baseUri, content, mediator);
+        return new HtmlParser(baseUri, content, context);
     }
     
     
@@ -411,7 +411,7 @@ public class GeccoFactory {
         return DownloaderFactory.DEFAULT_DWONLODER;
     }
     
-    public GeccoMediator createMediator() {
+    public GeccoContext createContext() {
         return null;
     }
 

@@ -1,6 +1,6 @@
 package com.geccocrawler.gecco.monitor;
 
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Method;
 
 import com.geccocrawler.gecco.spider.render.RenderException;
@@ -10,10 +10,10 @@ import net.sf.cglib.proxy.MethodProxy;
 
 public class RenderMointorIntercetor implements MethodInterceptor {
 
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
-    public RenderMointorIntercetor(GeccoMediator mediator) {
-        this.mediator = mediator;
+    public RenderMointorIntercetor(GeccoContext context) {
+        this.context = context;
     }
     
 	@Override

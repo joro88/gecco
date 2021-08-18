@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider.render;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +31,7 @@ public abstract class AbstractRender implements Render {
 	
 	private static Log log = LogFactory.getLog(AbstractRender.class);
 
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
     
 	/**
 	 * request请求的注入
@@ -48,9 +48,9 @@ public abstract class AbstractRender implements Render {
 	 */
 	protected CustomFieldRenderFactory customFieldRenderFactory;
 
-	public AbstractRender( GeccoMediator mediator ) {
-        this.mediator = mediator;
-        GeccoFactory factory = mediator.getFactory();
+	public AbstractRender( GeccoContext context ) {
+        this.context = context;
+        GeccoFactory factory = context.getFactory();
 		this.requestFieldRender = factory.createRequestFieldRender( this );
 		this.requestParameterFieldRender = factory.createRequestParameterFieldRender( this );
 	}

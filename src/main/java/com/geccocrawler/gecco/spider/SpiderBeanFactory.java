@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class SpiderBeanFactory {
 
 	protected PipelineFactory pipelineFactory;
     
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
     
 	protected Reflections reflections;
 
@@ -69,9 +69,9 @@ public class SpiderBeanFactory {
 		this(classPath, null, null);
 	}
 
-	public SpiderBeanFactory(String classPath, PipelineFactory pipelineFactory, GeccoMediator mediator) {
-        this.mediator = mediator;
-        GeccoFactory geccoFactory = mediator.getFactory();
+	public SpiderBeanFactory(String classPath, PipelineFactory pipelineFactory, GeccoContext context) {
+        this.context = context;
+        GeccoFactory geccoFactory = context.getFactory();
         
 		if (StringUtils.isNotEmpty(classPath)) {
 			reflections = new Reflections(
@@ -178,7 +178,7 @@ public class SpiderBeanFactory {
 	}
 
 	protected SpiderBeanContext initContext(Class<?> spiderBeanClass) {
-		SpiderBeanContext context = mediator.getFactory().createSpiderBeanContext(this);
+		SpiderBeanContext context = this.context.getFactory().createSpiderBeanContext(this);
 		// 关联的after、before、downloader
 		downloadContext(context, spiderBeanClass);
 		// 关联的render

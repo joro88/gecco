@@ -1,6 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import org.reflections.Reflections;
 
 /**
@@ -11,8 +11,8 @@ import org.reflections.Reflections;
  */
 public class DefaultDownloaderFactory extends DownloaderFactory {
 
-	public DefaultDownloaderFactory(Reflections reflections, GeccoMediator mediator) {
-		super(reflections, mediator);
+	public DefaultDownloaderFactory(Reflections reflections, GeccoContext context) {
+		super(reflections, context);
 	}
 
 	protected Object createDownloader(Class<?> downloaderClass) throws Exception {

@@ -86,7 +86,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
     
     protected GeccoFactory factory;
     
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
 	protected V ret;//callable 返回值
 
@@ -310,7 +310,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	@Override
 	public synchronized void start() {
-        EventListener eventListener = mediator.getEventListener();
+        EventListener eventListener = context.getEventListener();
 		if (eventListener != null) {
 			eventListener.onStart(this);
 		}
@@ -423,7 +423,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			log.info("close gecco!");
 		}
 
-        EventListener eventListener = mediator.getEventListener();
+        EventListener eventListener = context.getEventListener();
 		if (eventListener != null) {
 			eventListener.onStop(this);
 		}
@@ -448,7 +448,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 				spider.pause();
 			}
 		}
-        EventListener eventListener = mediator.getEventListener();
+        EventListener eventListener = context.getEventListener();
 		if (eventListener != null) {
 			eventListener.onPause(this);
 		}
@@ -463,7 +463,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 				spider.restart();
 			}
 		}
-        EventListener eventListener = mediator.getEventListener();
+        EventListener eventListener = context.getEventListener();
 		if (eventListener != null) {
 			eventListener.onRestart(this);
 		}
@@ -492,7 +492,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 				spider.stop();
 			}
 		}
-        EventListener eventListener = mediator.getEventListener();
+        EventListener eventListener = context.getEventListener();
 		if (eventListener != null) {
 			eventListener.onStop(this);
 		}
@@ -505,18 +505,18 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
     public GeccoEngine setFactory(GeccoFactory factory) {
         this.factory = factory;
         factory.setEngine(this);
-        mediator = factory.createMediator();
+        context = factory.createContext();
         EventListener eventListener = factory.createEventListener();
-        mediator.setEventListener(eventListener);
+        context.setEventListener(eventListener);
         return this;
     }
     
-    public GeccoMediator getMediator() {
-        return mediator;
+    public GeccoContext getContext() {
+        return context;
     }
 
-    public void setMediator(GeccoMediator mediator) {
-        this.mediator = mediator;
+    public void setMediator(GeccoContext context) {
+        this.context = context;
     }
 
 	@Override

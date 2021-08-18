@@ -6,12 +6,12 @@ import com.geccocrawler.gecco.listener.EventListener;
  *
  * @author joro88
  */
-public class GeccoMediator {
+public class GeccoContext {
     protected GeccoEngine engine;
     protected GeccoFactory factory;
 	protected EventListener eventListener;
 
-    public GeccoMediator(GeccoEngine engine) {
+    public GeccoContext(GeccoEngine engine) {
         this.engine = engine;
     }
     
@@ -19,7 +19,7 @@ public class GeccoMediator {
         return engine;
     }
 
-    public GeccoMediator setEngine(GeccoEngine engine) {
+    public GeccoContext setEngine(GeccoEngine engine) {
         this.engine = engine;
         return this;
     }
@@ -28,7 +28,7 @@ public class GeccoMediator {
 		return eventListener;
 	}
 
-	public GeccoMediator setEventListener(EventListener eventListener) {
+	public GeccoContext setEventListener(EventListener eventListener) {
 		this.eventListener = eventListener;
         return this;
 	}

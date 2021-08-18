@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.downloader.proxy;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.http.HttpHost;
@@ -16,8 +16,8 @@ public class Proxy {
 	
 	private String src;//来源
 	
-	public Proxy(String host, int port, GeccoMediator mediator) {
-		this.httpHost = mediator.getFactory().createApacheHttpHost(host, port, this);
+	public Proxy(String host, int port, GeccoContext context) {
+		this.httpHost = context.getFactory().createApacheHttpHost(host, port, this);
 		this.src = "custom";
 		this.successCount = new AtomicLong(0);
 		this.failureCount = new AtomicLong(0);

@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider.render;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +14,12 @@ public abstract class RenderFactory {
 	
 	protected Map<RenderType, Render> renders;
     
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
     protected GeccoFactory factory;
 	
-	public RenderFactory(Reflections reflections, GeccoMediator mediator) {
-        this.mediator = mediator;
-        this.factory = mediator.getFactory();
+	public RenderFactory(Reflections reflections, GeccoContext context) {
+        this.context = context;
+        this.factory = context.getFactory();
         
 		CustomFieldRenderFactory customFieldRenderFactory = factory.createCustomFieldRenderFactory(reflections, this);
 		renders = new HashMap<RenderType, Render>();

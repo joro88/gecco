@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.downloader;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import net.sf.cglib.proxy.Enhancer;
 
 import org.reflections.Reflections;
@@ -15,8 +15,8 @@ import com.geccocrawler.gecco.monitor.DownloadMointorIntercetor;
  *
  */
 public class MonitorDownloaderFactory extends DownloaderFactory {
-	public MonitorDownloaderFactory(Reflections reflections, GeccoMediator mediator) {
-		super(reflections, mediator);
+	public MonitorDownloaderFactory(Reflections reflections, GeccoContext context) {
+		super(reflections, context);
 	}
 
 	@Override

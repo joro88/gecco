@@ -1,7 +1,7 @@
 package com.geccocrawler.gecco.spider.render.html;
 
 import com.geccocrawler.gecco.GeccoFactory;
-import com.geccocrawler.gecco.GeccoMediator;
+import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,10 +33,10 @@ import net.sf.cglib.beans.BeanMap;
  *
  */
 public class AjaxFieldRender implements FieldRender {
-    protected GeccoMediator mediator;
+    protected GeccoContext context;
 
-    public AjaxFieldRender(GeccoMediator mediator) {
-        this.mediator = mediator;
+    public AjaxFieldRender(GeccoContext context) {
+        this.context = context;
     }
 
 	@Override
