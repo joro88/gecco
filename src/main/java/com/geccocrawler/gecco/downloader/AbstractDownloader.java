@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.GeccoFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -20,10 +21,12 @@ public abstract class AbstractDownloader implements Downloader {
 
 	protected static final Pattern charsetPattern = Pattern.compile("(?i)\\bcharset=\\s*\"?([^\\s;\"]*)");
 
+    protected GeccoContext context;
     protected GeccoFactory factory;
 
-    public AbstractDownloader(GeccoFactory factory) {
-        this.factory = factory;
+    public AbstractDownloader(GeccoContext context) {
+        this.context = context;
+        this.factory = context.getFactory();
     }
     
 	protected String getCharsetFromContentType(String contentType) {

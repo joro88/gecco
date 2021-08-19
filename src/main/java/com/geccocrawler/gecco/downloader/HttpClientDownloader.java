@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.downloader;
 
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.GeccoFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -72,11 +73,9 @@ public class HttpClientDownloader extends AbstractDownloader {
 	
 	protected HttpClientContext cookieContext;
 	
-	public HttpClientDownloader(GeccoFactory factory) {
-        super( factory );
+	public HttpClientDownloader(GeccoContext context) {
+        super( context );
                 
-        this.factory = factory;
-		
 		cookieContext = factory.createCookieHttpClientContext( this );
 		cookieContext.setCookieStore( factory.createCookieStore(this) );
 		
