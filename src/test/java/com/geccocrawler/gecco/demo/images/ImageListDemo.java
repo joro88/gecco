@@ -3,6 +3,7 @@ package com.geccocrawler.gecco.demo.images;
 import java.util.List;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
 import com.geccocrawler.gecco.annotation.Image;
@@ -34,7 +35,7 @@ public class ImageListDemo implements HtmlBean, Pipeline<ImageListDemo> {
 	}
 
 	public static void main(String[] args) {
-        GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
                 .classpath("com.geccocrawler.gecco.demo.images")
                 .start("http://canlian.jiading.gov.cn/gyzc/zcxmdt/content_430614")
                 .interval(1000)

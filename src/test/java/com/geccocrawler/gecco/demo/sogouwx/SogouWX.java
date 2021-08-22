@@ -3,6 +3,7 @@ package com.geccocrawler.gecco.demo.sogouwx;
 import java.util.List;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
 import com.geccocrawler.gecco.annotation.RequestParameter;
@@ -47,7 +48,7 @@ public class SogouWX implements HtmlBean {
 		start.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 		start.addHeader("Accept-Encoding", "gzip, deflate, sdch");
 		start.addHeader("Cache-Control", "max-age=0");
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.sogouwx")
 		.start(start)
 		//.start("http://mp.weixin.qq.com/s?__biz=MzAwMjIyODIwNA==&mid=2650194319&idx=7&sn=5fbba7eb7f393508461468ea5c412ba5&3rd=MzA3MDU4NTYzMw==&scene=6")

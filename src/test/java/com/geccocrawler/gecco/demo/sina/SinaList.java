@@ -3,6 +3,7 @@ package com.geccocrawler.gecco.demo.sina;
 import java.util.List;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
 import com.geccocrawler.gecco.annotation.PipelineName;
@@ -62,7 +63,7 @@ public class SinaList implements HtmlBean, Pipeline<SinaList> {
 	}
 
 	public static void main(String[] args) {
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.sina")
 		.start("http://news.sina.com.cn/china/")
 		.run();

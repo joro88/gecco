@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.demo;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.Href;
 import com.geccocrawler.gecco.annotation.HtmlField;
@@ -108,7 +109,7 @@ public class MyGithub implements HtmlBean {
 	}
 
 	public static void main(String[] args) {
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo")
 		//开始抓取的页面地址
 		.seed("https://github.com/xtuhcy/gecco")

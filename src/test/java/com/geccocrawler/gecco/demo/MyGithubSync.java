@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.demo;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.*;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.spider.HtmlBean;
@@ -91,7 +92,7 @@ public class MyGithubSync implements HtmlBean {
 
     public static void main(String[] args) throws Exception {
         //同步的方式爬取，该方式只支持一个seed页面，不建议在生产环境中使用
-        MyGithubSync mgs = (MyGithubSync)GeccoEngine.create().classpath("com.geccocrawler.gecco.demo")
+        MyGithubSync mgs = (MyGithubSync)new GeccoEngine(new GeccoFactory()).classpath("com.geccocrawler.gecco.demo")
                 .seed("https://github.com/xtuhcy/gecco").call();
         System.out.println(mgs.getProject());
     }

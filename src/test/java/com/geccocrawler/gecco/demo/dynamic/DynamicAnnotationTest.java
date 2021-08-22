@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.demo.dynamic;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.dynamic.DynamicGecco;
 
 /**
@@ -30,7 +31,7 @@ public class DynamicAnnotationTest {
 		.register();
 		
 		//开始抓取
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.dynamic")
 		.start("https://github.com/xtuhcy/gecco")
 		.run();

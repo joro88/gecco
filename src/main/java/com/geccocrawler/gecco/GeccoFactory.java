@@ -110,12 +110,12 @@ public class GeccoFactory {
         
     }
     
-    public GeccoContext getMediator() {
+    public GeccoContext getContext() {
         return context;
     }
 
     public PipelineFactory createPipelineFactory(Reflections reflections){
-        return new DefaultPipelineFactory(reflections);
+        return new DefaultPipelineFactory(context, reflections);
     } 
 
     public SpiderBeanFactory createSpiderBeanFactory(String classpath, final PipelineFactory pipelineFactory) {
@@ -388,7 +388,7 @@ public class GeccoFactory {
     }
     
     public DefaultPipelineFactory createDefaultPipelineFactory(final SpiderBeanFactory sbf) {
-        return new DefaultPipelineFactory(sbf.getReflections());
+        return new DefaultPipelineFactory(context, sbf.getReflections());
     }
     
     public SpiderBeanContext createSpiderBeanContext( final SpiderBeanFactory sbf ) {
@@ -412,7 +412,7 @@ public class GeccoFactory {
     }
     
     public GeccoContext createContext() {
-        return null;
+        return new GeccoContext(engine);
     }
 
     public EventListener createEventListener() {

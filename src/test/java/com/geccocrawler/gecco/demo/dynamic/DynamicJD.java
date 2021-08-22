@@ -2,6 +2,7 @@ package com.geccocrawler.gecco.demo.dynamic;
 
 import com.alibaba.fastjson.JSONObject;
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.dynamic.DynamicGecco;
 import com.geccocrawler.gecco.request.HttpGetRequest;
 
@@ -78,7 +79,7 @@ public class DynamicJD {
 		
 		HttpGetRequest start = new HttpGetRequest("http://www.jd.com/allSort.aspx");
 		start.setCharset("GBK");
-		GeccoEngine.create()
+		new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.dynamic")
 		.start(start)
 		.interval(2000)

@@ -1,14 +1,20 @@
 package com.geccocrawler.gecco.demo.sina;
 
 import com.alibaba.fastjson.JSONObject;
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.PipelineName;
 import com.geccocrawler.gecco.dynamic.DynamicGecco;
 import com.geccocrawler.gecco.pipeline.JsonPipeline;
 
 @PipelineName("sinaListDynamicPipeline")
 public class SinaListDynamic extends JsonPipeline {
-	
+
+    public SinaListDynamic(GeccoContext context) {
+        super(context);
+    }
+    
 	@Override
 	public void process(JSONObject jo) {
 		System.out.println(jo);		
@@ -26,7 +32,7 @@ public class SinaListDynamic extends JsonPipeline {
 		.listField("items", item).csspath("#subShowContent1_static .news-item h2 a").build()
 		.register();
 		
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.sina")
 		.start("http://news.sina.com.cn/china/")
 		.run();

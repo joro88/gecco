@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.demo.ajax;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Ajax;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
@@ -87,7 +88,7 @@ public class JDDetail implements HtmlBean {
 	public static void main(String[] args) throws Exception {
 		HttpRequest request = new HttpGetRequest("https://item.jd.com/1455427.html");
 		request.setCharset("GBK");
-		GeccoEngine.create()
+		new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.ajax")
 		//开始抓取的页面地址
 		.start(request)

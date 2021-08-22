@@ -98,8 +98,12 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		this.ret = ret;
 	}
 
-	protected GeccoEngine() {
+	public GeccoEngine(GeccoFactory factory) {
 		this.retry = 3;
+        this.factory = factory;
+        factory.setEngine(this);
+
+        context = factory.createContext();
 	}
 
 	/**
@@ -107,8 +111,9 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 	 * 
 	 * @return GeccoEngine
 	 */
-	public static GeccoEngine create() {
-		GeccoEngine geccoEngine = new GeccoEngine();
+    @Deprecated
+	public static GeccoEngine createDeprecated() {
+		GeccoEngine geccoEngine = new GeccoEngine(new GeccoFactory());
 		geccoEngine.setName("GeccoEngine");
 		return geccoEngine;
 	}
@@ -117,12 +122,20 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		return create(classpath, null);
 	}
 
+    /**
+     * Use constructor directly and create SpiderBeanFactory with GeccoFactory::createSpiderBeanFactory
+     * @param classpath
+     * @param pipelineFactory
+     * @return
+     * @deprecated
+     */
+    @Deprecated
 	public static GeccoEngine create(String classpath, PipelineFactory pipelineFactory) {
 		if (StringUtils.isEmpty(classpath)) {
 			// classpath不为空
 			throw new IllegalArgumentException("classpath cannot be empty");
 		}
-		GeccoEngine ge = create();
+		GeccoEngine ge = createDeprecated();
         SpiderBeanFactory spiderBeanFactory = ge.getFactory().createSpiderBeanFactory(classpath, pipelineFactory);
         ge.setSpiderBeanFactory(spiderBeanFactory);
 		return ge;
@@ -265,6 +278,11 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			Logger log = LogManager.getLogger("com.geccocrawler.gecco.spider.render");
 			log.setLevel(Level.DEBUG);
 		}
+        
+//        context.setFactory(factory);
+//        factory.setContext(context);
+        factory.setEngine(this);
+        context.setFactory(factory);
 		if(proxysLoader == null) {//默认采用proxys文件代理集合
 			proxysLoader = factory.createProxys();
 		}
@@ -504,18 +522,21 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
     public GeccoEngine setFactory(GeccoFactory factory) {
         this.factory = factory;
+        return this;
+    }
+    
+    public void wire(){
         factory.setEngine(this);
         context = factory.createContext();
         EventListener eventListener = factory.createEventListener();
         context.setEventListener(eventListener);
-        return this;
     }
     
     public GeccoContext getContext() {
         return context;
     }
 
-    public void setMediator(GeccoContext context) {
+    public void setContext(GeccoContext context) {
         this.context = context;
     }
 

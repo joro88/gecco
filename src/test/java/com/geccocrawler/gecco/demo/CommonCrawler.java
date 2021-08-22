@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco.demo;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
 import com.geccocrawler.gecco.annotation.Request;
@@ -37,7 +38,7 @@ public class CommonCrawler implements HtmlBean {
 	}
 	
 	public static void main(String[] args) {
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo")
 		.start("https://www.baidu.com/")
 		.interval(2000)

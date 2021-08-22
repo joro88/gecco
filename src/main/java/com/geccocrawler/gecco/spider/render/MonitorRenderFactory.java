@@ -20,7 +20,7 @@ public class MonitorRenderFactory extends RenderFactory {
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(HtmlRender.class);
 		enhancer.setCallback( factory.createRenderMointorIntercetor(this) );
-		return (HtmlRender)enhancer.create(new Class[]{GeccoFactory.class}, new Object[] {factory});
+		return (HtmlRender)enhancer.create(new Class[]{GeccoContext.class}, new Object[] {context});
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class MonitorRenderFactory extends RenderFactory {
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(JsonRender.class);
 		enhancer.setCallback( factory.createRenderMointorIntercetor(this) );
-		return (JsonRender)enhancer.create(new Class[]{GeccoFactory.class}, new Object[] {factory});
+		return (JsonRender)enhancer.create(new Class[]{GeccoContext.class}, new Object[] {context});
 	}
 	
 	

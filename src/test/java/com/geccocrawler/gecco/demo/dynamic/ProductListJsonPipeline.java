@@ -3,6 +3,7 @@ package com.geccocrawler.gecco.demo.dynamic;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.annotation.PipelineName;
 import com.geccocrawler.gecco.pipeline.JsonPipeline;
 import com.geccocrawler.gecco.request.HttpGetRequest;
@@ -11,6 +12,10 @@ import com.geccocrawler.gecco.scheduler.SchedulerContext;
 
 @PipelineName("productListJsonPipeline")
 public class ProductListJsonPipeline extends JsonPipeline {
+
+    public ProductListJsonPipeline(GeccoContext context) {
+        super(context);
+    }
 
 	@Override
 	public void process(JSONObject productList) {

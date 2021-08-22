@@ -24,7 +24,7 @@ public class MonitorDownloaderFactory extends DownloaderFactory {
 		Enhancer enhancer = geccoFactory.createEnhancer(downloaderClass, this);
 		enhancer.setSuperclass(downloaderClass);
 		enhancer.setCallback(geccoFactory.createDownloadMointorIntercetor(downloaderClass, this));
-		Object o = enhancer.create(new Class[]{GeccoFactory.class}, new Object[] {geccoFactory});
+		Object o = enhancer.create(new Class[]{GeccoContext.class}, new Object[] {context});
 		return o;
 	}
 

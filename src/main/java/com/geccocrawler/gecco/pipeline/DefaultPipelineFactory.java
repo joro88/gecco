@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.pipeline;
 
+import com.geccocrawler.gecco.GeccoContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -14,13 +15,16 @@ public class DefaultPipelineFactory implements PipelineFactory {
 	protected Map<String, Pipeline<? extends SpiderBean>> pipelines;
 
 	@SuppressWarnings({ "unchecked" })
-	public DefaultPipelineFactory(Reflections reflections) {
+	public DefaultPipelineFactory(GeccoContext context, Reflections reflections) {
 		this.pipelines = new HashMap<String, Pipeline<? extends SpiderBean>>();
 		Set<Class<?>> pipelineClasses = reflections.getTypesAnnotatedWith(PipelineName.class);
 		for (Class<?> pipelineClass : pipelineClasses) {
 			PipelineName spiderFilter = pipelineClass.getAnnotation(PipelineName.class);
 			try {
-				pipelines.put(spiderFilter.value(), (Pipeline<? extends SpiderBean>) pipelineClass.newInstance());
+//                Pipeline<? extends SpiderBean> instance = (Pipeline<? extends SpiderBean>)pipelineClass.newInstance();
+                Pipeline<? extends SpiderBean> instance = (Pipeline<? extends SpiderBean>) 
+                        pipelineClass.getDeclaredConstructor(GeccoContext.class).newInstance(context);
+				pipelines.put(spiderFilter.value(), instance);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

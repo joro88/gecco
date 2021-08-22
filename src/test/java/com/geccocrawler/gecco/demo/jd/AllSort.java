@@ -3,6 +3,7 @@ package com.geccocrawler.gecco.demo.jd;
 import java.util.List;
 
 import com.geccocrawler.gecco.GeccoEngine;
+import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.annotation.Gecco;
 import com.geccocrawler.gecco.annotation.HtmlField;
 import com.geccocrawler.gecco.annotation.Request;
@@ -66,7 +67,7 @@ public class AllSort implements HtmlBean {
 		//先获取分类列表
 		HttpGetRequest start = new HttpGetRequest("https://www.jd.com/allSort.aspx");
 		start.setCharset("GBK");
-		GeccoEngine.create()
+		new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.jd")
 		//开始抓取的页面地址
 		.start(start)
@@ -78,7 +79,7 @@ public class AllSort implements HtmlBean {
 		
 		
 		//分类列表下的商品列表采用3线程抓取
-		GeccoEngine.create()
+        new GeccoEngine(new GeccoFactory())
 		.classpath("com.geccocrawler.gecco.demo.jd")
 		//开始抓取的页面地址
 		.start(AllSortPipeline.sortRequests)

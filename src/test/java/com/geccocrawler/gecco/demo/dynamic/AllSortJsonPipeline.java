@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.annotation.PipelineName;
 import com.geccocrawler.gecco.pipeline.JsonPipeline;
 import com.geccocrawler.gecco.request.HttpGetRequest;
@@ -15,6 +16,10 @@ import com.geccocrawler.gecco.scheduler.SchedulerContext;
 public class AllSortJsonPipeline extends JsonPipeline {
 	
 	public static List<HttpRequest> sortRequests = new ArrayList<HttpRequest>();
+
+    public AllSortJsonPipeline(GeccoContext context) {
+        super(context);
+    }
 
 	@Override
 	public void process(JSONObject allSort) {
