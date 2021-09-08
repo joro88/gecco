@@ -1,6 +1,5 @@
 package com.geccocrawler.gecco.downloader;
 
-import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.GeccoContext;
 import net.sf.cglib.proxy.Enhancer;
 
