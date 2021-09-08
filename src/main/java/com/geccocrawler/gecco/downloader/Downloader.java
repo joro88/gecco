@@ -6,6 +6,8 @@ import com.geccocrawler.gecco.response.HttpResponse;
 /**
  * 下载器，负责将Scheduler里的请求下载下来，系统默认采用HttpClient作为下载引擎。
  * 
+ * ATTENTION: Constructor with one argument of type GeccoContext is needed.
+ * 
  * @author huchengyi
  *
  */

@@ -12,4 +12,9 @@ public class DownloadException extends Exception {
 		super(message);
 	}
 
+    public DownloadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    
 }
