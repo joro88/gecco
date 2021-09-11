@@ -367,7 +367,7 @@ public class GeccoFactory {
         return new ImageFieldRender( context );
     }
     
-    public UniqueSpiderScheduler createUniqueSpiderScheduler(Spider s) {
+    public Scheduler createUniqueSpiderScheduler(Spider s) {
         return new UniqueSpiderScheduler();
     }
     
