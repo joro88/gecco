@@ -13,6 +13,7 @@ public class GeccoContext {
 
     public GeccoContext(GeccoEngine engine) {
         this.engine = engine;
+        engine.setContext(this);
     }
     
     public GeccoEngine getEngine() {

@@ -106,12 +106,15 @@ public class GeccoFactory {
 
     public void setEngine(GeccoEngine engine) {
         this.engine = engine;
-        this.context = engine.getContext();
         
     }
     
     public GeccoContext getContext() {
         return context;
+    }
+
+    public void setContext(GeccoContext context) {
+        this.context = context;
     }
 
     public PipelineFactory createPipelineFactory(Reflections reflections){
