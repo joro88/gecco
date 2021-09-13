@@ -65,15 +65,15 @@ public class SpiderBeanFactory {
     
 	protected Reflections reflections;
 
-	public SpiderBeanFactory(String classPath) {
+	public SpiderBeanFactory(List<String> classPath) {
 		this(classPath, null, null);
 	}
 
-	public SpiderBeanFactory(String classPath, PipelineFactory pipelineFactory, GeccoContext context) {
+	public SpiderBeanFactory(List<String> classPath, PipelineFactory pipelineFactory, GeccoContext context) {
         this.context = context;
         GeccoFactory geccoFactory = context.getFactory();
         
-		if (StringUtils.isNotEmpty(classPath)) {
+		if (classPath.size() != 0) {
 			reflections = new Reflections(
 					ConfigurationBuilder.build("com.geccocrawler.gecco", classPath, GeccoClassLoader.get())
 							.setMetadataAdapter( geccoFactory.createGeccoJavaReflectionAdapter(this) )

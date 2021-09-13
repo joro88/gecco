@@ -121,8 +121,8 @@ public class GeccoFactory {
         return new DefaultPipelineFactory(context, reflections);
     } 
 
-    public SpiderBeanFactory createSpiderBeanFactory(String classpath, final PipelineFactory pipelineFactory) {
-        return new SpiderBeanFactory(classpath, pipelineFactory, context);
+    public SpiderBeanFactory createSpiderBeanFactory(List<String> classpaths, final PipelineFactory pipelineFactory) {
+        return new SpiderBeanFactory(classpaths, pipelineFactory, context);
     }
     
     public CookieStore createCookieStore( final AbstractDownloader downloader ) {

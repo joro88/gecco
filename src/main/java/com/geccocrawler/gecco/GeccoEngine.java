@@ -37,6 +37,7 @@ import com.geccocrawler.gecco.spider.Spider;
 import com.geccocrawler.gecco.spider.SpiderBeanFactory;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+import java.util.LinkedList;
 
 /**
  * 爬虫引擎，每个爬虫引擎最好独立进程，在分布式爬虫场景下，可以单独分配一台爬虫服务器。引擎包括Scheduler、Downloader、Spider、 SpiderBeanFactory4个主要模块
@@ -60,7 +61,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	protected List<Spider> spiders;
 
-	protected String classpath;
+	protected List<String> classpaths = new LinkedList<>();
 
 	protected int threadCount;
 
@@ -135,8 +136,10 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			// classpath不为空
 			throw new IllegalArgumentException("classpath cannot be empty");
 		}
+        List<String> classpaths = new LinkedList<>();
+        classpaths.add(classpath);
 		GeccoEngine ge = createDeprecated();
-        SpiderBeanFactory spiderBeanFactory = ge.getFactory().createSpiderBeanFactory(classpath, pipelineFactory);
+        SpiderBeanFactory spiderBeanFactory = ge.getFactory().createSpiderBeanFactory(classpaths, pipelineFactory);
         ge.setSpiderBeanFactory(spiderBeanFactory);
 		return ge;
 	}
@@ -244,7 +247,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 	}
 
 	public GeccoEngine classpath(String classpath) {
-		this.classpath = classpath;
+		classpaths.add(classpath);
 		return this;
 	}
 	
@@ -290,11 +293,11 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
             scheduler = factory.createScheduler();
 		}
 		if (spiderBeanFactory == null) {
-			if (StringUtils.isEmpty(classpath)) {
+			if (classpaths.size() == 0) {
 				// classpath不为空
 				throw new IllegalArgumentException("classpath cannot be empty");
 			}
-			spiderBeanFactory = factory.createSpiderBeanFactory(classpath, pipelineFactory);
+			spiderBeanFactory = factory.createSpiderBeanFactory(classpaths, pipelineFactory);
 		}
 		if (threadCount <= 0) {
 			threadCount = 1;
@@ -308,11 +311,12 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		for (HttpRequest startRequest : startRequests) {
 			scheduler.into(startRequest);
 		}
+        String classpathsConCat = String.join(", ", classpaths);
 		spiders = new ArrayList<Spider>(threadCount);
 		for (int i = 0; i < threadCount; i++) {
 			Spider spider = factory.createSpider();
 			spiders.add(spider);
-			Thread thread = new Thread(spider, "T" + classpath + i);
+			Thread thread = new Thread(spider, "T" + classpathsConCat + "_" + i);
 			thread.start();
 		}
 		startTime = new Date();
@@ -320,7 +324,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			// 监控爬虫基本信息
 			GeccoMonitor.monitor(this);
 			// 启动导出jmx信息
-			GeccoJmx.export(jmxPrefix == null ? classpath : jmxPrefix);
+			GeccoJmx.export(jmxPrefix == null ? classpathsConCat : jmxPrefix);
 		}
 		// 非循环模式等待线程执行完毕后关闭
 		closeUnitlComplete();
