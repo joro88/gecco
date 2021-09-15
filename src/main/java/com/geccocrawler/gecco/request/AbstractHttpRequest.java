@@ -13,19 +13,19 @@ public abstract class AbstractHttpRequest implements HttpRequest, Comparable<Htt
 	
 	private static final long serialVersionUID = -7284636094595149962L;
 
-	private String url;
+	protected String url;
 	
-	private boolean forceUseCharset = false;
+	protected boolean forceUseCharset = false;
 	
-	private String charset;
-	
-	private Map<String, String> parameters;
-	
-	private Map<String, String> cookies;
-	
-	private Map<String, String> headers;
-	
-	private long priority;
+    protected String charset;
+
+    protected Map<String, String> parameters;
+
+    protected Map<String, String> cookies;
+
+    protected Map<String, String> headers;
+
+    protected long priority;
 	
 	public AbstractHttpRequest() {
 		this.parameters = new HashMap<String, String>(1);

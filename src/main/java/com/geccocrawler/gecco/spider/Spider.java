@@ -96,7 +96,7 @@ public class Spider implements Runnable {
 					if(response.getStatus() == 302 || response.getStatus() == 301){
 						spiderScheduler.into(request.subRequest(response.getContent()));
 					} else {
-						log.error("cant't match url : " + request.getUrl());
+						log.error("cant't match url : " + request.getUrl() + "; response = " + response.getStatus() );
 					}
 				} else {
 					//获取SpiderBean的上下文：downloader,beforeDownloader,afterDownloader,render,pipelines
