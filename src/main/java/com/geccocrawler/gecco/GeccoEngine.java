@@ -297,12 +297,16 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 				// classpath不为空
 				throw new IllegalArgumentException("classpath cannot be empty");
 			}
+            beforeSpiderBeanFactoryCreate();
 			spiderBeanFactory = factory.createSpiderBeanFactory(classpaths, pipelineFactory);
 		}
 		if (threadCount <= 0) {
 			threadCount = 1;
 		}
 		this.cdl = new CountDownLatch(threadCount);
+        
+        beforeStart();
+        
 		startsJson();
 		if (startRequests.isEmpty()) {
 			// startRequests不为空
@@ -544,9 +548,22 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
         this.context = context;
     }
 
+    /**
+     * Hint: overwrite me.
+     */
+    protected void beforeStart() {
+    }
+    
+    /**
+     * Hint: overwrite me.
+     */
+    protected void beforeSpiderBeanFactoryCreate() {
+    }
+
 	@Override
 	public V call() throws Exception {
 		run();
 		return ret;
 	}
+
 }

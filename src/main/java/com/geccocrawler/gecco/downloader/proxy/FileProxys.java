@@ -35,17 +35,16 @@ public class FileProxys implements Proxys {
 	private static Log log = LogFactory.getLog(FileProxys.class);
 	
     protected GeccoContext context;
-    protected GeccoFactory factory;
     
 	protected ConcurrentLinkedQueue<Proxy> proxyQueue;
 	
 	protected Map<String, Proxy> proxys = null;
 	
-	public FileProxys(GeccoContext context) {
+	public FileProxys(){
+    } 
+    
+    public void load() {
         log.info("Init FileProxys()");
-        
-        this.context = context;
-        this.factory = context.getFactory();
         
 		try {
 			proxys = new ConcurrentHashMap<String, Proxy>();
@@ -72,6 +71,10 @@ public class FileProxys implements Proxys {
 		}
 	}
 
+    public void setContext(GeccoContext context) {
+        this.context = context;
+    }
+    
 	@Override
 	public boolean addProxy(String host, int port) {
 		return addProxy(host, port, null);
@@ -79,7 +82,7 @@ public class FileProxys implements Proxys {
 
 	@Override
 	public boolean addProxy(String host, int port, String src) {
-		Proxy proxy = factory.createProxy(host, port, src, this);
+		Proxy proxy = context.getFactory().createProxy(host, port, src, this);
 		if(StringUtils.isNotEmpty(src)) {
 			proxy.setSrc(src);
 		}

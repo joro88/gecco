@@ -308,7 +308,10 @@ public class GeccoFactory {
     }
     
     public Proxys createProxys() {
-        return new FileProxys(context);
+        FileProxys result = new FileProxys();
+        result.setContext(context);
+        result.load();
+        return result;
     }
     
     public Scheduler createScheduler() {
