@@ -282,8 +282,6 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			log.setLevel(Level.DEBUG);
 		}
         
-//        context.setFactory(factory);
-//        factory.setContext(context);
         factory.setEngine(this);
         context.setFactory(factory);
 		if(proxysLoader == null) {//默认采用proxys文件代理集合
@@ -440,7 +438,7 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			try {
 				cdl.await();
 			} catch (InterruptedException e) {
-				log.error(e);
+                processCdlInterruptException(e);
 			}
 			if (spiderBeanFactory != null) {
 				spiderBeanFactory.getDownloaderFactory().closeAll();
@@ -454,6 +452,10 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			eventListener.onStop(this);
 		}
 	}
+    
+    public void processCdlInterruptException(InterruptedException e) {
+        log.error(e);
+    }
 
 	/**
 	 * 启动引擎，并返回GeccoEngine对象

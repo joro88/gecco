@@ -128,6 +128,11 @@ public class Spider implements Runnable {
 						spiderScheduler.into(request);
 					}
 				}
+                
+                boolean stopThread = additionalExceptionProcessing(ex);
+                if (stopThread) {
+                    break;
+                }
 			} finally {
 				if(response != null) {
 					response.close();
@@ -252,4 +257,13 @@ public class Spider implements Runnable {
 	public SpiderBeanContext getSpiderBeanContext() {
 		return engine.getSpiderBeanFactory().getContext(currSpiderBeanClass);
 	}
+
+    /**
+     * 
+     * @param ex
+     * @return true, if Spider thread should be stopped. Otherwise - false.
+     */
+    protected boolean additionalExceptionProcessing(Exception ex) {
+        return false;
+    }
 }
