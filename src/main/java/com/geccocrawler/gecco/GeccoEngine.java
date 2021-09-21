@@ -101,11 +101,19 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	public GeccoEngine(GeccoFactory factory) {
 		this.retry = 3;
+        
+        // allow late factory registration
+        if (factory != null) {
+            registerFactory(factory);
+        }
+	}
+    
+    public void registerFactory(GeccoFactory factory){
         this.factory = factory;
         factory.setEngine(this);
 
         context = factory.createContext();
-	}
+    }
 
 	/**
 	 * 动态配置规则不能使用该方法构造GeccoEngine

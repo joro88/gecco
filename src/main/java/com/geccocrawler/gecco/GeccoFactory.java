@@ -100,7 +100,7 @@ public class GeccoFactory {
     public GeccoFactory() {
     }
     
-    public GeccoEngine getEngine() {
+    public GeccoEngine createEngine() {
         return engine;
     }
 
