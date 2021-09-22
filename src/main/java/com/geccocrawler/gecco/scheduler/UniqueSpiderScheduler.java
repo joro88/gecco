@@ -52,15 +52,16 @@ public class UniqueSpiderScheduler implements Scheduler {
 	}
 
 	@Override
-	public void into(HttpRequest request) {
+	public boolean into(HttpRequest request) {
 		long priority = System.nanoTime();
 		boolean success = set.add(new SortHttpRequest(priority, request));
 		if(success && log.isDebugEnabled()) {
 			log.debug("INTO("+priority+"):"+request.getUrl()+"(Referer:"+request.getHeaders().get("Referer")+")");
 		}
-		if(!success && log.isDebugEnabled()) {
+		if(!success) {
 			log.error("not unique request : " + request.getUrl());
 		}
+        return success;
 	}
 	
 	protected class SortHttpRequest {

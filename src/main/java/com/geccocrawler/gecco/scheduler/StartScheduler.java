@@ -29,11 +29,13 @@ public class StartScheduler implements Scheduler {
 	}
 
 	@Override
-	public void into(HttpRequest request) {
+	public boolean into(HttpRequest request) {
 		try {
 			startQueue.put(request);
+            return true;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+            return false;
 		}
 	}
 

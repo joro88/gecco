@@ -12,6 +12,6 @@ public interface Scheduler {
 	
 	public HttpRequest out();
 	
-	public void into(HttpRequest request);
+	public boolean into(HttpRequest request);
 	
 }

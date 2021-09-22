@@ -53,16 +53,18 @@ public class FIFOScheduler implements Scheduler {
 	 * 入队列，超过边界会阻塞等待
 	 */
 	@Override
-	public void into(HttpRequest request) {
+	public boolean into(HttpRequest request) {
 		if(request == null) {
-			return;
+			return false;
 		}
 		if(queue.offer(request)) {
 			if(log.isDebugEnabled()) {
 				log.debug("<==="+request.getUrl());
 			}
+            return true;
 		} else {
 			log.error(request.getUrl());
+            return false;
 		}
 	}
 

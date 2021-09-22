@@ -36,10 +36,11 @@ public class SpiderScheduler implements Scheduler {
 	}
 
 	@Override
-	public void into(HttpRequest request) {
+	public boolean into(HttpRequest request) {
 		queue.offer(request);
 		if(log.isDebugEnabled()) {
 			log.debug("INTO:"+request.getUrl()+"(Referer:"+request.getHeaders().get("Referer")+")");
 		}
+        return true;
 	}
 }
