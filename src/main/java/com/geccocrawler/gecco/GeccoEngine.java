@@ -55,8 +55,6 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 
 	protected Scheduler scheduler;
 
-	protected SpiderBeanFactory spiderBeanFactory;
-
 	protected PipelineFactory pipelineFactory;
 
 	protected List<Spider> spiders;
@@ -144,11 +142,10 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			// classpath不为空
 			throw new IllegalArgumentException("classpath cannot be empty");
 		}
-        List<String> classpaths = new LinkedList<>();
-        classpaths.add(classpath);
+//        List<String> classpaths = new LinkedList<>();
+//        classpaths.add(classpath);
 		GeccoEngine ge = createDeprecated();
-        SpiderBeanFactory spiderBeanFactory = ge.getFactory().createSpiderBeanFactory(classpaths, pipelineFactory);
-        ge.setSpiderBeanFactory(spiderBeanFactory);
+        ge.classpath(classpath);
 		return ge;
 	}
     
@@ -269,17 +266,20 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		return this;
 	}
 
+    @Deprecated
 	public GeccoEngine spiderBeanFactory(SpiderBeanFactory spiderBeanFactory) {
-		this.spiderBeanFactory = spiderBeanFactory;
-		return this;
+//		this.spiderBeanFactory = spiderBeanFactory;
+//		return this;
+        throw new RuntimeException("Deprecated. Correct approach (we use in gecco.injectable)"
+                + " is controlling dependent objects via GeccoFactory, not via setters in GeccoEngine");
 	}
 
 	public void register(Class<?> spiderBeanClass) {
-		getSpiderBeanFactory().addSpiderBean(spiderBeanClass);
+		context.getSpiderBeanFactory().addSpiderBean(spiderBeanClass);
 	}
 
 	public void unregister(Class<?> spiderBeanClass) {
-		getSpiderBeanFactory().removeSpiderBean(spiderBeanClass);
+		context.getSpiderBeanFactory().removeSpiderBean(spiderBeanClass);
 		DynamicGecco.unregister(spiderBeanClass);
 	}
 
@@ -298,13 +298,14 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		if (scheduler == null) {
             scheduler = factory.createScheduler();
 		}
-		if (spiderBeanFactory == null) {
+		if (context.getSpiderBeanFactory() == null) {
 			if (classpaths.size() == 0) {
 				// classpath不为空
 				throw new IllegalArgumentException("classpath cannot be empty");
 			}
             beforeSpiderBeanFactoryCreate();
-			spiderBeanFactory = factory.createSpiderBeanFactory(classpaths, pipelineFactory);
+			SpiderBeanFactory spiderBeanFactory = factory.createSpiderBeanFactory(classpaths, pipelineFactory);
+            context.setSpiderBeanFactory(spiderBeanFactory);
 		}
 		if (threadCount <= 0) {
 			threadCount = 1;
@@ -374,15 +375,6 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 		return scheduler;
 	}
 
-	public SpiderBeanFactory getSpiderBeanFactory() {
-		return spiderBeanFactory;
-	}
-
-	public SpiderBeanFactory setSpiderBeanFactory(SpiderBeanFactory newFactory) {
-        spiderBeanFactory = newFactory;
-		return spiderBeanFactory;
-	}
-
 	public int getInterval() {
 		return interval;
 	}
@@ -448,6 +440,8 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
 			} catch (InterruptedException e) {
                 processCdlInterruptException(e);
 			}
+            
+            SpiderBeanFactory spiderBeanFactory = context.getSpiderBeanFactory();
 			if (spiderBeanFactory != null) {
 				spiderBeanFactory.getDownloaderFactory().closeAll();
 			}

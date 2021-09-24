@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco;
 
 import com.geccocrawler.gecco.listener.EventListener;
+import com.geccocrawler.gecco.spider.SpiderBeanFactory;
 
 /**
  *
@@ -10,6 +11,7 @@ public class GeccoContext {
     protected GeccoEngine engine;
     protected GeccoFactory factory;
 	protected EventListener eventListener;
+    protected SpiderBeanFactory spiderBeanFactory;
 
     public GeccoContext(GeccoEngine engine) {
         this.engine = engine;
@@ -40,6 +42,14 @@ public class GeccoContext {
 
     public void setFactory(GeccoFactory factory) {
         this.factory = factory;
+    }
+
+    public SpiderBeanFactory getSpiderBeanFactory() {
+        return spiderBeanFactory;
+    }
+
+    public void setSpiderBeanFactory(SpiderBeanFactory spiderBeanFactory) {
+        this.spiderBeanFactory = spiderBeanFactory;
     }
     
     

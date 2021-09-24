@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider;
 
+import com.geccocrawler.gecco.GeccoContext;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -87,7 +88,7 @@ public class Spider implements Runnable {
 				log.debug("match url : " + request.getUrl());
 			}
 			//匹配SpiderBean
-			currSpiderBeanClass = engine.getSpiderBeanFactory().matchSpider(request);
+			currSpiderBeanClass = engine.getContext().getSpiderBeanFactory().matchSpider(request);
 			//download
 			HttpResponse response = null;
 			try {
@@ -215,7 +216,7 @@ public class Spider implements Runnable {
 				after = context.getAfterDownload();
 				timeout = context.getTimeout();
 			} else {
-				currDownloader = engine.getSpiderBeanFactory().getDownloaderFactory().defaultDownloader();
+				currDownloader = engine.getContext().getSpiderBeanFactory().getDownloaderFactory().defaultDownloader();
 			}
 			if(before != null) {
 				before.process(request);
@@ -246,6 +247,10 @@ public class Spider implements Runnable {
 		return engine;
 	}
 
+    public GeccoContext getContext(){
+        return engine.getContext();
+    }
+    
 	public Scheduler getSpiderScheduler() {
 		return spiderScheduler;
 	}
@@ -255,7 +260,7 @@ public class Spider implements Runnable {
 	}
 
 	public SpiderBeanContext getSpiderBeanContext() {
-		return engine.getSpiderBeanFactory().getContext(currSpiderBeanClass);
+		return engine.getContext().getSpiderBeanFactory().getContext(currSpiderBeanClass);
 	}
 
     /**
