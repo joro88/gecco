@@ -75,11 +75,11 @@ public abstract class AbstractRender implements Render {
 			}
 			requests(request, bean);
 			return bean;
-		} catch(Exception ex) {
+		} catch(InstantiationException | IllegalAccessException ex) {
 			//throw new RenderException(ex.getMessage(), clazz);
 			log.error("instance SpiderBean error", ex);
 			return null;
-		}
+        }
 	}
 
 	public abstract void fieldRender(HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean);

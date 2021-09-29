@@ -150,8 +150,8 @@ public class HtmlParser {
 		Elements elements = document.select(selector);
 		if (SpiderThreadLocal.get().getEngine().isDebug()) {
 			if (!selector.equalsIgnoreCase("script")) {
-				// log.debug("["+selector+"]--->["+elements+"]");
-				System.out.println("[" + selector + "]--->[" + elements + "]");
+                log.debug("jsoup-g-inj["+selector+"]--->["+elements+"]");
+				//System.out.println("[" + selector + "]--->[" + elements + "]");
 			}
 		}
 		return elements;
