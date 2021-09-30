@@ -83,15 +83,15 @@ public abstract class AbstractHttpRequest implements HttpRequest, Comparable<Htt
 
 	@Override
 	public HttpRequest subRequest(String url) {
-		try {
-			HttpRequest request = (HttpRequest)clone();
-			request.setUrl(url);
-			request.refer(this.getUrl());
-			return request;
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		try { // Overriden
+			HttpRequest request = (HttpRequest)clone(); // Overriden
+			request.setUrl(url); // Overriden
+			request.refer(this.getUrl()); // Overriden
+			return request; // Overriden
+		} catch(Exception ex) { // Overriden
+			ex.printStackTrace(); // Overriden
+		} // Overriden
+		return null; // Overriden
 	}
 
 	@Override
