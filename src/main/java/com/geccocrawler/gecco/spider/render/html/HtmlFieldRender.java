@@ -40,7 +40,7 @@ public class HtmlFieldRender implements FieldRender {
 				fieldMap.put(htmlField.getName(), value);
 			}
 		}
-		beanMap.putAll(fieldMap);
+		beanMap.putAll(fieldMap); // ATTENTION: if some properties are not added, maybe they dont have getter and setter methods !
 	}
 
 	protected Object injectHtmlField(HttpRequest request, HttpResponse response, Field field,	Class<? extends SpiderBean> clazz) {
