@@ -59,6 +59,7 @@ public class JSVarFieldRender implements FieldRender {
 					jsEvaluateScript(cx, scope, sc, request, response, beanMap, bean);
 				} catch (Exception ex) {
 					// ex.printStackTrace();
+                    log.debug("exception while evaluating JS");
 				}
 			}
 		}
