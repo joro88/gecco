@@ -18,6 +18,7 @@ import org.apache.http.HttpHost;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+import java.io.IOException;
 
 /**
  * 代理ip从classpath下的proxys文件里加载
@@ -66,7 +67,7 @@ public class FileProxys implements Proxys {
 					}
 				}
 			}
-		} catch(Exception ex) {
+		} catch(IOException ex) {
 			log.info("proxys not load");
 		}
 	}

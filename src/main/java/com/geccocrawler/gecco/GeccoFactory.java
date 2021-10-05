@@ -101,7 +101,7 @@ public class GeccoFactory {
     }
     
     public GeccoEngine createEngine() {
-        return engine;
+        return new GeccoEngine(this);
     }
 
     public void setEngine(GeccoEngine engine) {
