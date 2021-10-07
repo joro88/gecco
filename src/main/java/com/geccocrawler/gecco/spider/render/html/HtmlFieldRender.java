@@ -45,7 +45,7 @@ public class HtmlFieldRender implements FieldRender {
 	protected Object injectHtmlField(HttpRequest request, HttpResponse response, Field field,	Class<? extends SpiderBean> clazz) {
 		HtmlField htmlField = field.getAnnotation(HtmlField.class);
 		String content = response.getContent();
-		HtmlParser parser = context.getFactory().createHtmlParser(request.getUrl(), content, this);
+		HtmlParser parser = context.getFactory().createHtmlParser(request.getUrl(), content, this, field);
 		// parser.setLogClass(clazz);
 		String cssPath = htmlField.cssPath();
 		Class<?> type = field.getType();// 属性的类

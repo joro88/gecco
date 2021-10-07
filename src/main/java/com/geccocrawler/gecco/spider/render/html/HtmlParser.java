@@ -42,7 +42,7 @@ public class HtmlParser {
     protected GeccoFactory factory;
     protected GeccoContext context;
 
-	public HtmlParser(String baseUri, String content, GeccoContext context) {
+	public HtmlParser(String baseUri, String content, GeccoContext context, Field field) {
         this.context = context;
         this.factory = context.getFactory();
 		long beginTime = System.currentTimeMillis();

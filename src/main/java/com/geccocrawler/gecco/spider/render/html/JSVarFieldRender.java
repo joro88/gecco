@@ -51,7 +51,7 @@ public class JSVarFieldRender implements FieldRender {
 		ScriptableObject scope = cx.initSafeStandardObjects();
 		String windowScript = "var window = {};var document = {};";
 		cx.evaluateString(scope, windowScript, "window", 1, null);
-		HtmlParser parser = context.getFactory().createHtmlParser(request.getUrl(), response.getContent(), this);
+		HtmlParser parser = context.getFactory().createHtmlParser(request.getUrl(), response.getContent(), this, null);
 		for (Element ele : parser.$("script")) {
 			String sc = ele.html();
 			if (StringUtils.isNotEmpty(sc)) {

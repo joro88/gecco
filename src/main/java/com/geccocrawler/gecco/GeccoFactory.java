@@ -48,6 +48,7 @@ import com.geccocrawler.gecco.spider.render.json.JsonFieldRender;
 import com.geccocrawler.gecco.spider.render.json.JsonRender;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -401,8 +402,8 @@ public class GeccoFactory {
         return new SpiderBeanContext();
     }
     
-    public HtmlParser createHtmlParser( String baseUri, String content, Object caller ) {
-        return new HtmlParser(baseUri, content, context);
+    public HtmlParser createHtmlParser( String baseUri, String content, Object caller, Field field ) {
+        return new HtmlParser(baseUri, content, context, field);
     }
     
     
