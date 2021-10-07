@@ -1,6 +1,5 @@
 package com.geccocrawler.gecco.spider.render.html;
 
-import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
