@@ -1,6 +1,5 @@
 package com.geccocrawler.gecco.spider.render;
 
-import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.GeccoContext;
 import org.reflections.Reflections;
 
