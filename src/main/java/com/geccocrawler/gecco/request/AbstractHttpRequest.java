@@ -94,6 +94,7 @@ public abstract class AbstractHttpRequest implements HttpRequest, Comparable<Htt
 		return null; // Overridden
 	}
 
+    protected void subRequestExtraProcessing(HttpRequest request) {
 	@Override
 	public void addHeader(String name, String value) {
 		headers.put(name, value);
