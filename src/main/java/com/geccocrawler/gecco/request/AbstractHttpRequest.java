@@ -87,6 +87,7 @@ public abstract class AbstractHttpRequest implements HttpRequest, Comparable<Htt
 			HttpRequest request = (HttpRequest)clone(); // Overridden
 			request.setUrl(url); // Overridden
 			request.refer(this.getUrl()); // Overridden
+            subRequestExtraProcessing(request);
 			return request; // Overridden
 		} catch(Exception ex) { // Overridden
 			ex.printStackTrace(); // Overridden
@@ -95,6 +96,8 @@ public abstract class AbstractHttpRequest implements HttpRequest, Comparable<Htt
 	}
 
     protected void subRequestExtraProcessing(HttpRequest request) {
+    }
+    
 	@Override
 	public void addHeader(String name, String value) {
 		headers.put(name, value);
