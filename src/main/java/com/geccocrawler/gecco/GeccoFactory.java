@@ -351,13 +351,21 @@ public class GeccoFactory {
     }
     
     public HtmlRender createHtmlRender(final RenderFactory rf){
-        return new HtmlRender( context );
+        return new HtmlRender( context );  // ATTENTION: relation with getHtmlRenderClass()
+    }
+    
+    public Class<? extends HtmlRender> getHtmlRenderClass(final RenderFactory rf){
+        return HtmlRender.class; // ATTENTION: relation with createHtmlRender()
     }
     
     public JsonRender createJsonRender(final RenderFactory rf) {
 		return new JsonRender( context );
     }
     
+    public Class<? extends JsonRender> getJsonRenderClass(final RenderFactory rf) {
+        return JsonRender.class;
+    }
+
     public AjaxFieldRender createAjaxFieldRender(final Render r) {
         return new AjaxFieldRender( context );
     }
