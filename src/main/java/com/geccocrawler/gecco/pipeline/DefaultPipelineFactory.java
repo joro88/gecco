@@ -9,8 +9,11 @@ import org.reflections.Reflections;
 
 import com.geccocrawler.gecco.annotation.PipelineName;
 import com.geccocrawler.gecco.spider.SpiderBean;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class DefaultPipelineFactory implements PipelineFactory {
+    private static final Log log = LogFactory.getLog(DefaultPipelineFactory.class);
 
 	protected Map<String, Pipeline<? extends SpiderBean>> pipelines;
 
@@ -21,12 +24,12 @@ public class DefaultPipelineFactory implements PipelineFactory {
 		for (Class<?> pipelineClass : pipelineClasses) {
 			PipelineName spiderFilter = pipelineClass.getAnnotation(PipelineName.class);
 			try {
-//                Pipeline<? extends SpiderBean> instance = (Pipeline<? extends SpiderBean>)pipelineClass.newInstance();
                 Pipeline<? extends SpiderBean> instance = (Pipeline<? extends SpiderBean>) 
                         pipelineClass.getDeclaredConstructor(GeccoContext.class).newInstance(context);
 				pipelines.put(spiderFilter.value(), instance);
 			} catch (Exception ex) {
 				ex.printStackTrace();
+                log.error("exception while trying to attach pipeline " + spiderFilter.value(), ex);
 			}
 		}
 	}

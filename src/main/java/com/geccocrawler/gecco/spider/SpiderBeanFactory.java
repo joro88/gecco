@@ -93,7 +93,7 @@ public class SpiderBeanFactory {
 		if (pipelineFactory != null) {
 			this.pipelineFactory = pipelineFactory;
 		} else {
-			this.pipelineFactory = geccoFactory.createDefaultPipelineFactory(this);
+			this.pipelineFactory = geccoFactory.createPipelineFactory( reflections );
 		}
 		this.spiderBeans = new ConcurrentHashMap<String, Class<? extends SpiderBean>>();
 		this.spiderBeanContexts = new ConcurrentHashMap<String, SpiderBeanContext>();

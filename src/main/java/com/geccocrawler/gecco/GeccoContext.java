@@ -1,6 +1,7 @@
 package com.geccocrawler.gecco;
 
 import com.geccocrawler.gecco.listener.EventListener;
+import com.geccocrawler.gecco.pipeline.PipelineFactory;
 import com.geccocrawler.gecco.spider.SpiderBeanFactory;
 
 /**
@@ -52,5 +53,8 @@ public class GeccoContext {
         this.spiderBeanFactory = spiderBeanFactory;
     }
     
+    public PipelineFactory getPipelineFactory() {
+        return spiderBeanFactory.getPipelineFactory();
+    }
     
 }

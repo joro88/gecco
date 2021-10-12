@@ -402,10 +402,6 @@ public class GeccoFactory {
         return new MonitorRenderFactory(sbf.getReflections(), context);
     }
     
-    public DefaultPipelineFactory createDefaultPipelineFactory(final SpiderBeanFactory sbf) {
-        return new DefaultPipelineFactory(context, sbf.getReflections());
-    }
-    
     public SpiderBeanContext createSpiderBeanContext( final SpiderBeanFactory sbf ) {
         return new SpiderBeanContext();
     }
