@@ -17,7 +17,6 @@ import org.mozilla.javascript.ScriptableObject;
 import org.reflections.ReflectionUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.geccocrawler.gecco.GeccoFactory;
 import com.geccocrawler.gecco.GeccoContext;
 import com.geccocrawler.gecco.annotation.JSVar;
 import com.geccocrawler.gecco.request.HttpRequest;
