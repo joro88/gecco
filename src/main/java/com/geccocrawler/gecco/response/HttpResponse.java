@@ -16,11 +16,12 @@ public class HttpResponse {
 
 	private int status;
 	
-	public static HttpResponse createSimple(String content) {
-		HttpResponse response = new HttpResponse();
-		response.setContent(content);
-		return response;
-	}
+//  @Deprecated // USE factory instead
+//	public static HttpResponse createSimple(String content) {
+//		HttpResponse response = new HttpResponse();
+//		response.setContent(content);
+//		return response;
+//	}
 
 	public ByteArrayInputStream getRaw() {
 		return raw;
