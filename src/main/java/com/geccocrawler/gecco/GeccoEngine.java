@@ -537,12 +537,14 @@ public class GeccoEngine<V> extends Thread implements Callable<V> {
         return this;
     }
     
+    /*
     public void wire(){
         factory.setEngine(this);
         context = factory.createContext();
         EventListener eventListener = factory.createEventListener();
         context.setEventListener(eventListener);
     }
+    */
     
     public GeccoContext getContext() {
         return context;
