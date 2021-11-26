@@ -260,7 +260,9 @@ public class GeccoFactory {
     }
     
     public HttpResponse createSimpleHttpResponse(String content) {
-        return HttpResponse.createSimple(content);
+        HttpResponse result = new HttpResponse();
+        result.setContent(content);
+        return result;
     }
     
     public Enhancer createEnhancer( 
