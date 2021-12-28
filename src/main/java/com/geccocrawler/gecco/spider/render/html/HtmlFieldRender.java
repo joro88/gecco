@@ -62,8 +62,7 @@ public class HtmlFieldRender implements FieldRender {
 				try {
 					return parser.$basicList(cssPath, field);
 				} catch (Exception ex) {
-					//throw new FieldRenderException(field, content, ex);
-					FieldRenderException.log(field, content, ex);
+					processRenderFieldfException(field, content, ex);
 				}
 			}
 		} else if (isArray) {
@@ -77,8 +76,7 @@ public class HtmlFieldRender implements FieldRender {
 				try {
 					return parser.$basicList(cssPath, field).toArray();
 				} catch (Exception ex) {
-					//throw new FieldRenderException(field, content, ex);
-					FieldRenderException.log(field, content, ex);
+					processRenderFieldfException(field, content, ex);
 				}
 			}
 		} else {
@@ -90,12 +88,16 @@ public class HtmlFieldRender implements FieldRender {
 				try {
 					return parser.$basic(cssPath, field);
 				} catch (Exception ex) {
-					//throw new FieldRenderException(field, content, ex);
-					FieldRenderException.log(field, content, ex);
+					processRenderFieldfException(field, content, ex);
 				}
 			}
 		}
 		return null;
 	}
+
+    public void processRenderFieldfException(Field field, String content, Exception ex) {
+        //throw new FieldRenderException(field, content, ex);
+        FieldRenderException.log(field, content, ex);
+    }
 
 }
