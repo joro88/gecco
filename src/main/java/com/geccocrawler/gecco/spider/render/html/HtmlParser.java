@@ -67,7 +67,7 @@ public class HtmlParser {
 		if (field.isAnnotationPresent(Text.class)) {// @Text
 			Text text = field.getAnnotation(Text.class);
 			String value = $text(selector, text.own());
-			return Conversion.getValue(field.getType(), value);
+			return context.getFieldConversion().getValue(field.getType(), value);
 		} else if (field.isAnnotationPresent(Image.class)) {// @Image
 			Image image = field.getAnnotation(Image.class);
 			String imageSrc = $image(selector, image.value());
@@ -83,7 +83,7 @@ public class HtmlParser {
 		} else if (field.isAnnotationPresent(Attr.class)) {// @Attr
 			Attr attr = field.getAnnotation(Attr.class);
 			String name = attr.value();
-			return Conversion.getValue(field.getType(), $attr(selector, name));
+			return context.getFieldConversion().getValue(field.getType(), $attr(selector, name));
 		} else if (field.isAnnotationPresent(Html.class)) {// @Html
 			Html html = field.getAnnotation(Html.class);
 			return $html(selector, html.outer());
@@ -98,7 +98,7 @@ public class HtmlParser {
 		for (Element el : els) {
 			if (field.isAnnotationPresent(Text.class)) {// @Text
 				Text text = field.getAnnotation(Text.class);
-				list.add(Conversion.getValue(field.getType(), $text(el, text.own())));
+				list.add(context.getFieldConversion().getValue(field.getType(), $text(el, text.own())));
 			} else if (field.isAnnotationPresent(Image.class)) {// @Image
 				Image image = field.getAnnotation(Image.class);
 				String imageSrc = $image(el, image.value());
@@ -114,7 +114,7 @@ public class HtmlParser {
 			} else if (field.isAnnotationPresent(Attr.class)) {// @Attr
 				Attr attr = field.getAnnotation(Attr.class);
 				String name = attr.value();
-				list.add(Conversion.getValue(field.getType(), $attr(el, name)));
+				list.add(context.getFieldConversion().getValue(field.getType(), $attr(el, name)));
 			} else if (field.isAnnotationPresent(Html.class)) {// @Html
 				Html html = field.getAnnotation(Html.class);
 				list.add(html.outer() ? el.outerHtml() : el.html());

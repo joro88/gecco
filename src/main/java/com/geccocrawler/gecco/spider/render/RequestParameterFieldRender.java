@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.render;
 
+import com.geccocrawler.gecco.GeccoContext;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +16,15 @@ import com.geccocrawler.gecco.request.HttpPostRequest;
 import com.geccocrawler.gecco.request.HttpRequest;
 import com.geccocrawler.gecco.response.HttpResponse;
 import com.geccocrawler.gecco.spider.SpiderBean;
-import com.geccocrawler.gecco.spider.conversion.Conversion;
 
 public class RequestParameterFieldRender implements FieldRender {
+    protected GeccoContext context;
 
-	@Override
+    public RequestParameterFieldRender(GeccoContext context) {
+        this.context = context;
+    }
+    
+    @Override
 	@SuppressWarnings({ "unchecked" })
 	public void render(HttpRequest request, HttpResponse response, BeanMap beanMap, SpiderBean bean) {
 		Map<String, Object> fieldMap = new HashMap<String, Object>();
@@ -36,7 +41,7 @@ public class RequestParameterFieldRender implements FieldRender {
 				src = postRequest.getField(key);
 			}
 			try {
-				Object value = Conversion.getValue(field.getType(), src);
+				Object value = context.getFieldConversion().getValue(field.getType(), src);
 				fieldMap.put(field.getName(), value);
 			} catch(Exception ex) {
 				//throw new FieldRenderException(field, src, ex);

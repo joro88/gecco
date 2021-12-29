@@ -31,6 +31,7 @@ import com.geccocrawler.gecco.spider.Spider;
 import com.geccocrawler.gecco.spider.SpiderBeanContext;
 import com.geccocrawler.gecco.spider.SpiderBeanFactory;
 import com.geccocrawler.gecco.spider.SpiderThreadLocal;
+import com.geccocrawler.gecco.spider.conversion.Conversion;
 import com.geccocrawler.gecco.spider.render.AbstractRender;
 import com.geccocrawler.gecco.spider.render.CustomFieldRenderFactory;
 import com.geccocrawler.gecco.spider.render.MonitorRenderFactory;
@@ -345,7 +346,7 @@ public class GeccoFactory {
     }
     
     public RequestParameterFieldRender createRequestParameterFieldRender( final AbstractRender renderer ) {
-        return new RequestParameterFieldRender();
+        return new RequestParameterFieldRender(context);
     }
     
     public JsonFieldRender createJsonFieldRender( final Render render ) {
@@ -410,6 +411,10 @@ public class GeccoFactory {
     
     public HtmlParser createHtmlParser( String baseUri, String content, Object caller, Field field ) {
         return new HtmlParser(baseUri, content, context, field);
+    }
+    
+    public Conversion createFieldConversion(){
+        return new Conversion();
     }
     
     

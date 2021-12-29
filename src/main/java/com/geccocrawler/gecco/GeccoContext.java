@@ -3,6 +3,7 @@ package com.geccocrawler.gecco;
 import com.geccocrawler.gecco.listener.EventListener;
 import com.geccocrawler.gecco.pipeline.PipelineFactory;
 import com.geccocrawler.gecco.spider.SpiderBeanFactory;
+import com.geccocrawler.gecco.spider.conversion.Conversion;
 
 /**
  *
@@ -13,6 +14,7 @@ public class GeccoContext {
     protected GeccoFactory factory;
 	protected EventListener eventListener;
     protected SpiderBeanFactory spiderBeanFactory;
+    protected Conversion fieldConversion;
 
     public GeccoContext(GeccoEngine engine) {
         this.engine = engine;
@@ -43,6 +45,7 @@ public class GeccoContext {
 
     public void setFactory(GeccoFactory factory) {
         this.factory = factory;
+        fieldConversion = factory.createFieldConversion();
     }
 
     public SpiderBeanFactory getSpiderBeanFactory() {
@@ -56,5 +59,13 @@ public class GeccoContext {
     public PipelineFactory getPipelineFactory() {
         return spiderBeanFactory.getPipelineFactory();
     }
-    
+
+    public Conversion getFieldConversion() {
+        return fieldConversion;
+    }
+
+    public void setFieldConversion(Conversion fieldConversion) {
+        this.fieldConversion = fieldConversion;
+    }
+
 }

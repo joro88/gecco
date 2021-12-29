@@ -8,43 +8,44 @@ import java.util.Map;
 public class Conversion {
 
 	@SuppressWarnings({ "rawtypes" })
-	protected static final Map<Class<?>, TypeHandle> TYPE_HANDLERS = new HashMap<Class<?>, TypeHandle>();
-	static {
+	protected final Map<Class<?>, TypeHandle> typeHandlers = new HashMap<Class<?>, TypeHandle>();
+
+    public Conversion() {
 		// int, float, long, double, java.util.Date, boolean, String
-		TYPE_HANDLERS.put(Integer.class, new IntegerTypeHandle());
-		TYPE_HANDLERS.put(int.class, new IntegerTypeHandle());
-		TYPE_HANDLERS.put(Long.class, new LongTypeHandle());
-		TYPE_HANDLERS.put(long.class, new LongTypeHandle());
-		TYPE_HANDLERS.put(Float.class, new FloatTypeHandle());
-		TYPE_HANDLERS.put(float.class, new FloatTypeHandle());
-		TYPE_HANDLERS.put(Double.class, new DoubleTypeHandle());
-		TYPE_HANDLERS.put(double.class, new DoubleTypeHandle());
-		TYPE_HANDLERS.put(Boolean.class, new BooleanTypeHandle());
-		TYPE_HANDLERS.put(boolean.class, new BooleanTypeHandle());
-		TYPE_HANDLERS.put(Date.class, new DateTypeHandle());
-		TYPE_HANDLERS.put(BigDecimal.class, new BigDecimalTypeHandle());
+		typeHandlers.put(Integer.class, new IntegerTypeHandle());
+		typeHandlers.put(int.class, new IntegerTypeHandle());
+		typeHandlers.put(Long.class, new LongTypeHandle());
+		typeHandlers.put(long.class, new LongTypeHandle());
+		typeHandlers.put(Float.class, new FloatTypeHandle());
+		typeHandlers.put(float.class, new FloatTypeHandle());
+		typeHandlers.put(Double.class, new DoubleTypeHandle());
+		typeHandlers.put(double.class, new DoubleTypeHandle());
+		typeHandlers.put(Boolean.class, new BooleanTypeHandle());
+		typeHandlers.put(boolean.class, new BooleanTypeHandle());
+		typeHandlers.put(Date.class, new DateTypeHandle());
+		typeHandlers.put(BigDecimal.class, new BigDecimalTypeHandle());
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public static void register(Class<?> type, TypeHandle typeHandle) {
-		TYPE_HANDLERS.put(type, typeHandle);
+	public void register(Class<?> type, TypeHandle typeHandle) {
+		typeHandlers.put(type, typeHandle);
 	}
 
-	public static void unregister(Class<?> type) {
-		TYPE_HANDLERS.remove(type);
+	public void unregister(Class<?> type) {
+		typeHandlers.remove(type);
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public static Object getValue(Class<?> type, Object value) throws Exception {
-		TypeHandle th = TYPE_HANDLERS.get(type);
+	public Object getValue(Class<?> type, Object value) throws Exception {
+		TypeHandle th = typeHandlers.get(type);
 		if (th != null && value != null) {
 			return th.getValue(value);
 		}
 		return value;
 	}
 
-	public static Object getDateValue(Object value, String format) throws Exception {
-		DateTypeHandle th = (DateTypeHandle) TYPE_HANDLERS.get(Date.class);
+	public Object getDateValue(Object value, String format) throws Exception {
+		DateTypeHandle th = (DateTypeHandle) typeHandlers.get(Date.class);
 		return th.getValue(value, format);
 	}
 }

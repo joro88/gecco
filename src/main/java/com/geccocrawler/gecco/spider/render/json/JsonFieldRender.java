@@ -140,7 +140,7 @@ public class JsonFieldRender implements FieldRender {
 			FieldRenderException.log(field, jsonPath + " not found in : " + json);
 		}
 		try {
-			return Conversion.getValue(field.getType(), src);
+			return context.getFieldConversion().getValue(field.getType(), src);
 		} catch (Exception ex) {
 			//throw new FieldRenderException(field, "Conversion error : " + src, ex);
 			FieldRenderException.log(field, "Conversion error : " + src, ex);

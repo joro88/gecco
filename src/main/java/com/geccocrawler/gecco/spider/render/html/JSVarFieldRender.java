@@ -104,14 +104,14 @@ public class JSVarFieldRender implements FieldRender {
 			}
 			// 将json对象转换为javabean属性
 			try {
-				Object value = Conversion.getValue(clazz, src);
+				Object value = context.getFieldConversion().getValue(clazz, src);
 				return value;
 			} catch (Exception e) {
 				log.error("field [" + field.getName() + "] conversion error, value=" + src);
 			}
 		} else if (jsObj instanceof Boolean || jsObj instanceof Number || jsObj instanceof String) {
 			try {
-				Object value = Conversion.getValue(clazz, jsObj);
+				Object value = context.getFieldConversion().getValue(clazz, jsObj);
 				return value;
 			} catch (Exception e) {
 				log.error("field [" + field.getName() + "] conversion error, value=" + jsObj);
