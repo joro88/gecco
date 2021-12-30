@@ -41,7 +41,7 @@ public class RequestParameterFieldRender implements FieldRender {
 				src = postRequest.getField(key);
 			}
 			try {
-				Object value = context.getFieldConversion().getValue(field.getType(), src);
+				Object value = context.getFieldConversion().getValue(field.getType(), src, field);
 				fieldMap.put(field.getName(), value);
 			} catch(Exception ex) {
 				//throw new FieldRenderException(field, src, ex);

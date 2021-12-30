@@ -1,5 +1,6 @@
 package com.geccocrawler.gecco.spider.conversion;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class Conversion {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public Object getValue(Class<?> type, Object value) throws Exception {
+	public Object getValue(Class<?> type, Object value, Field field) throws Exception {
 		TypeHandle th = typeHandlers.get(type);
 		if (th != null && value != null) {
 			return th.getValue(value);
@@ -44,7 +45,7 @@ public class Conversion {
 		return value;
 	}
 
-	public Object getDateValue(Object value, String format) throws Exception {
+	public Object getDateValue(Object value, String format, Field field) throws Exception {
 		DateTypeHandle th = (DateTypeHandle) typeHandlers.get(Date.class);
 		return th.getValue(value, format);
 	}
